@@ -1,0 +1,20 @@
+# Build
+*.iml
+.gradle/
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+.DS_Store
+/.idea/
+local.properties
+*.apk
+
+# Secrets and private files: the bot token, the signing key, the real contacts
+/telegram.properties
+*.jks
+*.keystore
+keystore.properties
+/app/src/main/assets/config.local.json
+/diari-privat.md

@@ -1,0 +1,3 @@
+# Copy to telegram.properties and put the token BotFather gave you.
+# telegram.properties is never committed.
+token=PUT_YOUR_BOT_TOKEN_HERE

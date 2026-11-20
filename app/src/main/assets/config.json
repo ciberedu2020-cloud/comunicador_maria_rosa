@@ -1,0 +1,12 @@
+{
+  "sendDelaySeconds": 5,
+  "features": {
+    "listen": true,
+    "reply": true,
+    "photos": false,
+    "text": false
+  },
+  "contacts": [
+    { "id": "familiar", "name": "Familiar", "active": true }
+  ]
+}

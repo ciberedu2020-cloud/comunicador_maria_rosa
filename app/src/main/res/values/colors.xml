@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Same yellow as the button on screen. -->
+    <color name="launcher_yellow">#FFD54F</color>
+</resources>
