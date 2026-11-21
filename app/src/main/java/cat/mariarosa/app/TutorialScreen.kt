@@ -74,7 +74,15 @@ private val Ca = Words(
     fixBody = "Perquè l'app quedi sempre a la pantalla i no es tregui fàcilment. És opcional. " +
         "No és un bloqueig total (això requereix un mode especial), però dificulta que algú surti per error.",
     btnHome = "Que el botó d'inici torni a l'app", btnPin = "Fixa l'app a la pantalla",
-    fixNote = "Per sortir-ne: a «Programació» hi ha «Deixa de fixar». Després d'un reinici s'ha de tornar a fixar.",
+    fixNote = "Tres nivells, de menys a més segur:\n\n" +
+        "1. Fixar l'app (els botons de dalt). Es pot sortir mantenint premuts Enrere i Recents (el gest pot variar segons el mòbil) " +
+        "i s'ha de tornar a fixar després d'un reinici. Va bé contra tocs sense voler, no contra algú que ho sàpiga.\n\n" +
+        "2. Fixar l'app i posar un bloqueig de pantalla amb PIN; als ajustos d'Android, activar que demani el PIN abans de deixar de fixar " +
+        "(el nom de l'opció varia). Compte: amb bloqueig de pantalla, en despertar el mòbil pot demanar el PIN abans de mostrar l'app. " +
+        "No s'ha provat amb aquesta app.\n\n" +
+        "3. Mode quiosc (l'app com a administradora del mòbil): no se'n pot sortir sense l'adult i sobreviu als reinicis. " +
+        "Cal un mòbil restaurat de fàbrica, sense cap compte, i fer-ho un cop des d'un ordinador. Aquesta versió de l'app encara no ho porta incorporat.\n\n" +
+        "Per sortir d'una fixació: «Programació» → «Deixa de fixar».",
     doneTitle = "Tot a punt", doneBody = "Ja pots tancar la guia. Tot es pot canviar més endavant des de «Programació».",
 )
 
@@ -99,7 +107,15 @@ private val Es = Words(
     fixBody = "Para que la app quede siempre en la pantalla y no se salga fácilmente. Es opcional. " +
         "No es un bloqueo total (eso requiere un modo especial), pero dificulta salir por error.",
     btnHome = "Que el botón de inicio vuelva a la app", btnPin = "Fijar la app en la pantalla",
-    fixNote = "Para salir: en «Programación» está «Dejar de fijar». Tras un reinicio hay que volver a fijarla.",
+    fixNote = "Tres niveles, de menos a más seguro:\n\n" +
+        "1. Fijar la app (los botones de arriba). Se puede salir manteniendo pulsados Atrás y Recientes (el gesto puede variar según el móvil) " +
+        "y hay que volver a fijarla tras un reinicio. Sirve contra toques sin querer, no contra alguien que lo sepa.\n\n" +
+        "2. Fijar la app y poner un bloqueo de pantalla con PIN; en los ajustes de Android, activar que pida el PIN antes de dejar de fijar " +
+        "(el nombre de la opción varía). Ojo: con bloqueo de pantalla, al despertar el móvil puede pedir el PIN antes de mostrar la app. " +
+        "No se ha probado con esta app.\n\n" +
+        "3. Modo quiosco (la app como administradora del móvil): no se puede salir sin el adulto y sobrevive a los reinicios. " +
+        "Requiere un móvil restaurado de fábrica, sin ninguna cuenta, y hacerlo una vez desde un ordenador. Esta versión de la app aún no lo incluye.\n\n" +
+        "Para salir de una fijación: «Programación» → «Dejar de fijar».",
     doneTitle = "Todo listo", doneBody = "Ya puedes cerrar la guía. Todo se puede cambiar después desde «Programación».",
 )
 
@@ -124,7 +140,15 @@ private val En = Words(
     fixBody = "So the app always stays on the screen and cannot easily be left. It is optional. " +
         "It is not a full lock (that needs a special mode), but it makes leaving by mistake harder.",
     btnHome = "Make the home button return to the app", btnPin = "Pin the app to the screen",
-    fixNote = "To leave: \"Programming\" has \"Stop pinning\". After a restart it must be pinned again.",
+    fixNote = "Three levels, from less to more secure:\n\n" +
+        "1. Pin the app (the buttons above). It can be left by holding Back and Recents (the gesture may differ by phone), " +
+        "and it must be pinned again after a restart. Good against accidental touches, not against someone who knows how.\n\n" +
+        "2. Pin the app and set a screen lock with a PIN; in Android's settings, turn on asking for the PIN before unpinning " +
+        "(the option's name varies). Careful: with a screen lock, waking the phone may ask for the PIN before showing the app. " +
+        "Not tested with this app.\n\n" +
+        "3. Kiosk mode (the app as the phone's administrator): it cannot be left without the adult and survives restarts. " +
+        "It needs a factory-reset phone with no accounts, and doing it once from a computer. This version of the app does not include it yet.\n\n" +
+        "To leave a pinned screen: \"Programming\" → \"Stop pinning\".",
     doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\".",
 )
 

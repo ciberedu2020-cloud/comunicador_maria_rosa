@@ -38,6 +38,9 @@ s'escolta amb un toc.
 - **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
   i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
   No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.
+  La guia explica tres nivells: (1) fixar l'app, (2) fixar + bloqueig de pantalla amb PIN que es demana per desfixar
+  (no provat amb aquesta app: en despertar pot demanar el PIN abans de veure-la), (3) mode quiosc, que cal fer un cop
+  des d'un ordinador en un mòbil restaurat de fàbrica i sense comptes, i que encara no està programat.
 - Si no hi ha internet, ho diu a la pantalla: «Sense connexió a internet».
 - Es manté en marxa amb la pantalla apagada (servei en primer pla) i **arrenca sola** quan es reinicia el mòbil.
 
