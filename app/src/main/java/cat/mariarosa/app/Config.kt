@@ -3,6 +3,9 @@ package cat.mariarosa.app
 import android.content.Context
 import org.json.JSONObject
 
+/** The most people that fit on the screen with letters still readable. */
+const val MAX_CONTACTS = 5
+
 /** One person Maria Rosa can talk to. Inactive contacts are never shown. */
 data class Contact(
     val id: String,

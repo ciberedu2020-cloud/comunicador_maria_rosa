@@ -238,13 +238,19 @@ private fun Home(
     onSendNow: () -> Unit,
     onSettings: () -> Unit,
 ) {
-    val contacts = config.activeContacts
+    val contacts = config.activeContacts.take(MAX_CONTACTS)
+    val n = contacts.size
+    // The more people share the screen, the smaller the letters; from three on,
+    // each person gets one row (listen | reply) instead of two stacked buttons.
+    val scale = when { n <= 1 -> 1f; n == 2 -> 0.65f; else -> 0.5f }
+    val compact = n >= 3
+    val gap = if (compact) 8.dp else 16.dp
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(gap),
     ) {
         if (state.countdown != null || state.doorOpen) {
             // Only while a reply waits to be sent (and 3 s after it is thrown away): a small door for the adult, out of the way.
@@ -268,115 +274,44 @@ private fun Home(
             val (colour, title, subtitle) = when {
                 playing -> Triple(Blue, S.listening, S.tapToStop)
                 waiting > 0 -> Triple(Green, S.newMessageFrom(contact), S.tapToListen)
-                contacts.size == 1 -> Triple(Yellow, S.hello, S.noNewMessage)
+                n == 1 -> Triple(Yellow, S.hello, S.noNewMessage)
                 else -> Triple(Yellow, if (Lang.current == "ca") contact.fullCapital else contact.name, S.noNewMessage)
             }
-            Box(
-                modifier = Modifier
-                    .weight(if (config.features.reply) 1.3f else 1f)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(colour)
-                    .clickable { onTap(contact.id) },
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        title,
-                        color = Color.Black,
-                        fontFamily = Atkinson,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 48.sp,
-                        textAlign = TextAlign.Center,
-                    )
-                    Text(subtitle, color = Color.Black, fontFamily = Atkinson, fontSize = 28.sp, textAlign = TextAlign.Center)
-                }
+            // Recording, counting and results belong to ONE contact: only her buttons change.
+            val mine = state.replyContact == contact.id
+            val recording = mine && state.recording
+            val notice = if (mine) state.notice else null
+            val countdown = if (mine) state.countdown else null
+            val (rColour, rTitle, rSubtitle) = when {
+                recording -> Triple(
+                    Red,
+                    S.recording("${state.recordSeconds / 60}:${"%02d".format(state.recordSeconds % 60)}"),
+                    S.tapToSend,
+                )
+                notice == Notice.Sending -> Triple(Blue, S.sending, "")
+                notice == Notice.Sent -> Triple(Green, S.sent, S.willReceive(contact))
+                notice == Notice.Failed -> Triple(Orange, S.sendFailed, S.tryAgain)
+                notice == Notice.Discarded -> Triple(Light, S.discarded, S.notSent)
+                else -> Triple(Light, S.replyTo(contact), S.tapAndSpeak)
             }
-            if (config.features.reply) {
-                // Recording, counting and results belong to ONE contact: only her buttons change.
-                val mine = state.replyContact == contact.id
-                val recording = mine && state.recording
-                val notice = if (mine) state.notice else null
-                val (rColour, rTitle, rSubtitle) = when {
-                    recording -> Triple(
-                        Red,
-                        S.recording("${state.recordSeconds / 60}:${"%02d".format(state.recordSeconds % 60)}"),
-                        S.tapToSend,
-                    )
-                    notice == Notice.Sending -> Triple(Blue, S.sending, "")
-                    notice == Notice.Sent -> Triple(Green, S.sent, S.willReceive(contact))
-                    notice == Notice.Failed -> Triple(Orange, S.sendFailed, S.tryAgain)
-                    notice == Notice.Discarded -> Triple(Light, S.discarded, S.notSent)
-                    else -> Triple(Light, S.replyTo(contact), S.tapAndSpeak)
-                }
-                val countdown = if (mine) state.countdown else null
-                if (countdown != null) {
-                    // A recording is waiting: it goes by itself, or the X throws it away.
-                    Row(
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .weight(2f)
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(24.dp))
-                                .background(Orange)
-                                .clickable { onSendNow() },
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
-                                Text(
-                                    S.sendingIn(countdown),
-                                    color = Color.Black,
-                                    fontFamily = Atkinson,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 36.sp,
-                                    textAlign = TextAlign.Center,
-                                )
-                                Text(
-                                    S.sendNowHint,
-                                    color = Color.Black,
-                                    fontFamily = Atkinson,
-                                    fontSize = 24.sp,
-                                    textAlign = TextAlign.Center,
-                                )
-                            }
-                        }
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(24.dp))
-                                .background(Red)
-                                .clickable { onCancel() },
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text("✕", color = Color.Black, fontFamily = Atkinson, fontWeight = FontWeight.Bold, fontSize = 90.sp)
+            if (compact) {
+                Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
+                    if (countdown != null) {
+                        CountdownRow(Modifier.weight(1f), countdown, scale, gap, onSendNow, onCancel)
+                    } else {
+                        Tile(Modifier.weight(if (config.features.reply) 1.5f else 1f), colour, title, subtitle, 48 * scale, 28 * scale) { onTap(contact.id) }
+                        if (config.features.reply) {
+                            Tile(Modifier.weight(1f), rColour, rTitle, rSubtitle, 40 * scale, 26 * scale) { onReply(contact.id) }
                         }
                     }
-                } else
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(rColour)
-                        .clickable { onReply(contact.id) },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            rTitle,
-                            color = Color.Black,
-                            fontFamily = Atkinson,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 40.sp,
-                            textAlign = TextAlign.Center,
-                        )
-                        if (rSubtitle.isNotEmpty()) {
-                            Text(rSubtitle, color = Color.Black, fontFamily = Atkinson, fontSize = 26.sp, textAlign = TextAlign.Center)
-                        }
+                }
+            } else {
+                Tile(Modifier.weight(if (config.features.reply) 1.3f else 1f).fillMaxWidth(), colour, title, subtitle, 48 * scale, 28 * scale) { onTap(contact.id) }
+                if (config.features.reply) {
+                    if (countdown != null) {
+                        CountdownRow(Modifier.weight(1f).fillMaxWidth(), countdown, scale, gap, onSendNow, onCancel)
+                    } else {
+                        Tile(Modifier.weight(1f).fillMaxWidth(), rColour, rTitle, rSubtitle, 40 * scale, 26 * scale) { onReply(contact.id) }
                     }
                 }
             }
@@ -390,6 +325,68 @@ private fun Home(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
+        }
+    }
+}
+
+/** One big coloured button with a title and a line under it. */
+@Composable
+private fun Tile(
+    modifier: Modifier,
+    colour: Color,
+    title: String,
+    subtitle: String,
+    titleSp: Float,
+    subtitleSp: Float,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(24.dp))
+            .background(colour)
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
+            Text(
+                title,
+                color = Color.Black,
+                fontFamily = Atkinson,
+                fontWeight = FontWeight.Bold,
+                fontSize = titleSp.sp,
+                lineHeight = (titleSp * 1.1f).sp,
+                textAlign = TextAlign.Center,
+            )
+            if (subtitle.isNotEmpty()) {
+                Text(subtitle, color = Color.Black, fontFamily = Atkinson, fontSize = subtitleSp.sp, textAlign = TextAlign.Center)
+            }
+        }
+    }
+}
+
+/** A recording is waiting: tapping the count sends it now, the red X throws it away. */
+@Composable
+private fun CountdownRow(
+    modifier: Modifier,
+    countdown: Int,
+    scale: Float,
+    gap: androidx.compose.ui.unit.Dp,
+    onSendNow: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    Row(modifier = modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(gap)) {
+        Tile(Modifier.weight(2f), Orange, S.sendingIn(countdown), S.sendNowHint, 36 * scale, 22 * scale) { onSendNow() }
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .clip(RoundedCornerShape(24.dp))
+                .background(Red)
+                .clickable { onCancel() },
+            contentAlignment = Alignment.Center,
+        ) {
+            Text("✕", color = Color.Black, fontFamily = Atkinson, fontWeight = FontWeight.Bold, fontSize = (90 * scale).sp)
         }
     }
 }

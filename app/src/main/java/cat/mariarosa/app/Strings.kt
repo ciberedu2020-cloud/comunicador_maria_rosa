@@ -158,6 +158,12 @@ object S {
     val visible get() = tr("Surt a la pantalla", "Sale en la pantalla", "Shown on the screen", "Affiché à l'écran")
     val hidden get() = tr("Amagat", "Oculto", "Hidden", "Masqué")
     val removeContact get() = tr("Treu aquest contacte", "Quitar este contacto", "Remove this contact", "Retirer ce contact")
+    val maxContacts get() = tr(
+        "Màxim 5 contactes: és el que cap a la pantalla amb la lletra llegible.",
+        "Máximo 5 contactos: es lo que cabe en la pantalla con letra legible.",
+        "Maximum 5 contacts: that is what fits on the screen with readable letters.",
+        "5 contacts au maximum : c'est ce qui tient à l'écran avec des lettres lisibles.",
+    )
     val addManual get() = tr("Afegeix un contacte a mà", "Añadir un contacto a mano", "Add a contact by hand", "Ajouter un contact à la main")
     val soundTitle get() = tr("So", "Sonido", "Sound", "Son")
     val soundOn get() = tr("Sona un avís quan arriba un missatge", "Suena un aviso cuando llega un mensaje", "A chime plays when a message arrives", "Un signal sonore retentit à l'arrivée d'un message")

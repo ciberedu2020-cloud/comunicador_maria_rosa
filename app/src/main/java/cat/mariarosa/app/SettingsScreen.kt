@@ -175,7 +175,7 @@ fun SettingsScreen(
                 if (drafts.none { it.telegramId.trim() == s.chatId.toString() }) {
                     Card(background = Color(0xFFFFF3CD)) {
                         Body(S.wroteBot(s.name, s.chatId), color = Color.Black)
-                        Big(S.addHer, primary = true) {
+                        Big(S.addHer, primary = true, enabled = drafts.size < MAX_CONTACTS) {
                             drafts.add(Draft("c${System.currentTimeMillis()}", s.name, "", s.chatId.toString(), true))
                             prefs.stranger = null
                             stranger = null
@@ -216,6 +216,8 @@ fun SettingsScreen(
                 Big(S.addManual) {
                     drafts.add(Draft("c${System.currentTimeMillis()}", "", "", "", true))
                 }
+            } else {
+                Body(S.maxContacts)
             }
 
             // ---- Sound ----
@@ -243,6 +245,7 @@ fun SettingsScreen(
             Big(w.btnPin, onClick = onPin)
             Big(S.unpin, onClick = onUnpin)
             Big(w.btnHome, onClick = onHome)
+            Body(w.fixExit)
             Big(if (showLevels) w.levelsHide else w.levelsShow) { showLevels = !showLevels }
             if (showLevels) Body(w.fixLevels)
 
@@ -260,4 +263,3 @@ fun SettingsScreen(
     }
 }
 
-private const val MAX_CONTACTS = 4
