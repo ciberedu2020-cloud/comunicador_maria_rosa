@@ -24,21 +24,19 @@ s'escolta amb un toc.
   (ignora el primer segon i mig, perquè un doble toc no l'envii sense voler); una **X vermella** esborra la nota;
   si no es toca res, s'envia sola.
 - **Només veu**, als dos sentits. Si algú escriu text, el bot respon que de moment només rep notes de veu.
-- **Programació, sense ordinador:** durant el compte enrere, i 3 segons després d'esborrar la nota amb la X, surt a dalt, petit, «⚙ Programació». Hi ha el nom i
-  l'article de cada contacte, el número de Telegram, so d'avís sí/no, PIN opcional i un accés als ajustos de Wi-Fi.
-  Si hi ha PIN, en sortir de l'app (recents, pantalla apagada) Programació es tanca; la guia aguanta deu minuts.
-  Entrar-hi **esborra la nota que esperava** (qui programa no parla). La primera vegada, si no hi ha cap contacte amb número,
-  l'app s'obre directament aquí. Si algú desconegut escriu al bot, apareix a la pantalla amb un botó per afegir-lo.
+- **Programació, sense ordinador:** durant el compte enrere, i 3 segons després d'esborrar la nota amb la X, surt a dalt,
+  petit, «⚙ Programació». Se subdivideix de dalt a baix: com està ara (Wi-Fi i bot, amb botó per connectar-se al Wi-Fi),
+  contactes (nom, article, número; les persones noves que escriuen al bot surten soles per afegir-les d'un toc), so,
+  PIN opcional (explicat: protegeix Programació, no és el del mòbil), fixar l'app i bateria. Entrar-hi **esborra la nota que
+  esperava**. Amb PIN, en sortir de l'app Programació es tanca; la guia aguanta deu minuts.
 - **Dos o més contactes:** cada contacte té els seus botons. Quan en graves un, només es posa en vermell (i després en
   taronja/verd) el botó d'aquell contacte; els altres no fan res mentre dura. L'avís sonor és el mateix per a tots.
-- **Guia de configuració (opcional):** la primera vegada, si no hi ha cap contacte amb número, s'ofereix una guia en
-  català, castellà, anglès o francès. Explica com crear el bot amb @BotFather i enganxar-ne el token (es comprova abans de desar-lo),
-  com afegir la persona (nom, article i número, que també surt sol quan ella escriu al bot) i com fixar l'app a la pantalla.
-  Cada aparell té el seu bot, que crea qui el prepara amb el nom que vulgui; el text de la guia i de Programació
-  mostra el nom del bot que realment s'està fent servir, o «pendent» si encara no n'hi ha cap.
-  La pregunta de la bateria només es fa un cop, en instal·lar; es pot tornar a demanar des de Programació.
-  Es pot saltar a qualsevol pas; si es salta, no torna a sortir sola. Sempre es pot reobrir des de «Programació».
-  Només la guia és multillenguatge (ca/es/en/fr); la resta de pantalles estan en català.
+- **Guia de configuració (opcional):** surt **la primera vegada després d'instal·lar** l'app (amb tot el que això comporta:
+  sense ella ningú sabria com programar-la), en català, castellà, anglès o francès. Es pot saltar a qualsevol pas i
+  llavors no torna a sortir sola; es reobre des de Programació. Passos: (1) Wi-Fi, amb l'estat i un botó per connectar-s'hi;
+  (2) el bot: cada aparell té el seu, que crea qui el prepara amb @BotFather i en pega el token, que es comprova abans
+  de desar-lo; (3) qui hi parlarà (nom, article i número, que surt sol quan la persona escriu al bot); (4) PIN opcional;
+  (5) fixar l'app. La pregunta de la bateria només es fa un cop, en instal·lar. Només la guia és multillenguatge (ca/es/en/fr).
 - **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
   i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
   No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.

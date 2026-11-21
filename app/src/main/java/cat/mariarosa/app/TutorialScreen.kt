@@ -51,6 +51,8 @@ internal class Words(
     val save: String, val saved: String,
     val fixTitle: String, val fixIntro: String, val btnHome: String, val btnPin: String,
     val levelsShow: String, val levelsHide: String, val fixLevels: String,
+    val wifiTitle: String, val wifiBody: String, val wifiOn: String, val wifiOff: String, val wifiBtn: String,
+    val pinTitle: String, val pinBody: String, val pinLabel: String, val pinNote: String,
     val doneTitle: String, val doneBody: String,
 )
 
@@ -62,7 +64,7 @@ internal val Ca = Words(
         "Aquesta guia és opcional: serveix per deixar l'app a punt amb només aquest mòbil, sense ordinador. " +
         "Hi ha tres coses a fer: connectar un bot de Telegram, afegir la persona amb qui es parlarà " +
         "i, si vols, fixar l'app a la pantalla. Pots saltar-la ara i tornar-hi des de «Programació».",
-    botTitle = "1. El bot de Telegram",
+    botTitle = "2. El bot de Telegram",
     botSteps = "Cada aparell té el seu propi bot, que crees tu amb el nom que vulguis.\n\n" +
         "A Telegram, busca @BotFather (el que té el segell blau de verificat).\n" +
         "Envia-li /newbot, tria un nom i un usuari que acabi en «bot».\n" +
@@ -71,13 +73,13 @@ internal val Ca = Words(
     alreadyBot = "Aquest aparell ja té un bot. Si no en vols canviar, deixa la casella buida i toca «Següent».",
     paste = "Enganxa", checking = "Comprovant…",
     tokenBad = "No funciona: comprova que sigui el token sencer i que hi hagi internet.",
-    contactTitle = "2. Qui hi parlarà",
+    contactTitle = "3. Qui hi parlarà",
     contactSteps = "Aquesta persona ha d'obrir Telegram, buscar %s, tocar Start i escriure «hola». " +
         "Quan ho faci, el seu nom i número apareixeran aquí sols. També pots escriure'ls a mà.",
     botRef = "el bot que has creat",
     nameLabel = "Nom (surt al botó)", articleLabel = "Article davant del nom", numberLabel = "Número de Telegram",
     wrote = "Ha escrit: %s (%s)", useIt = "Fes-lo servir", save = "Desa aquest contacte", saved = "Contacte desat ✔",
-    fixTitle = "3. Fixar l'app",
+    fixTitle = "5. Fixar l'app",
     fixIntro = "Per facilitar l'ús de l'app a persones a qui costa fer servir els mòbils, proposem fer servir " +
         "aquest mòbil exclusivament per a aquesta aplicació. Per això hi ha tres nivells perquè l'app quedi fixada a la pantalla, " +
         "de menys a més segur. El primer es pot fer ara amb els botons; els altres els pots llegir més avall. Tot és opcional.",
@@ -91,6 +93,13 @@ internal val Ca = Words(
         "3. Mode quiosc (l'app com a administradora del mòbil): no se'n pot sortir sense l'adult i sobreviu als reinicis. " +
         "Cal un mòbil restaurat de fàbrica, sense cap compte, i fer-ho un cop des d'un ordinador. Aquesta versió de l'app encara no ho porta incorporat.\n\n" +
         "Per sortir d'una fixació: «Programació» → «Deixa de fixar».",
+    wifiTitle = "1. Wi-Fi",
+    wifiBody = "Aquest mòbil funciona només amb Wi-Fi: no té número de telèfon ni dades mòbils. Ha d'estar connectat al Wi-Fi de la casa on es farà servir; sense això no rebrà ni enviarà missatges. Comprova que hi estigui, o connecta'l ara.",
+    wifiOn = "Connectat al Wi-Fi ✔", wifiOff = "Encara no està connectat a cap Wi-Fi", wifiBtn = "Obre els ajustos de Wi-Fi",
+    pinTitle = "4. Protegir Programació",
+    pinBody = "«Programació» és la pantalla on es canvia la configuració de l'app (contactes, so…). Només ho ha de fer un adult. Si vols que ningú més hi pugui entrar (per exemple, els nets), posa-hi un PIN de 4 xifres: el demanarà cada cop que algú intenti obrir Programació. No és el codi per desbloquejar el mòbil. És opcional.",
+    pinLabel = "PIN (4 xifres; buit = sense PIN)",
+    pinNote = "Apunta'l en un lloc segur: si s'oblida, l'única manera de treure'l és reinstal·lar l'app, i es perd la configuració.",
     doneTitle = "Tot a punt", doneBody = "Ja pots tancar la guia. Tot es pot canviar més endavant des de «Programació».",
 )
 
@@ -102,7 +111,7 @@ private val Es = Words(
         "Esta guía es opcional: sirve para dejar la app lista solo con este móvil, sin ordenador. " +
         "Hay tres cosas: conectar un bot de Telegram, añadir a la persona con quien se hablará y, si quieres, " +
         "fijar la app en la pantalla. Puedes saltarla ahora y volver desde «Programación».",
-    botTitle = "1. El bot de Telegram",
+    botTitle = "2. El bot de Telegram",
     botSteps = "Cada aparato tiene su propio bot, que creas tú con el nombre que quieras.\n\n" +
         "En Telegram, busca @BotFather (el que tiene el sello azul de verificado).\n" +
         "Envíale /newbot, elige un nombre y un usuario que acabe en «bot».\n" +
@@ -111,13 +120,13 @@ private val Es = Words(
     alreadyBot = "Este aparato ya tiene un bot. Si no quieres cambiarlo, deja la casilla vacía y toca «Siguiente».",
     paste = "Pegar", checking = "Comprobando…",
     tokenBad = "No funciona: comprueba que sea el token entero y que haya internet.",
-    contactTitle = "2. Quién hablará",
+    contactTitle = "3. Quién hablará",
     contactSteps = "Esa persona debe abrir Telegram, buscar %s, tocar Start y escribir «hola». " +
         "Cuando lo haga, su nombre y número aparecerán aquí solos. También puedes escribirlos a mano.",
     botRef = "el bot que has creado",
     nameLabel = "Nombre (sale en el botón)", articleLabel = "Artículo delante del nombre", numberLabel = "Número de Telegram",
     wrote = "Ha escrito: %s (%s)", useIt = "Usar", save = "Guardar este contacto", saved = "Contacto guardado ✔",
-    fixTitle = "3. Fijar la app",
+    fixTitle = "5. Fijar la app",
     fixIntro = "Para facilitar el uso de la app a personas a quienes les cuesta usar el móvil, proponemos usar " +
         "este móvil exclusivamente para esta aplicación. Por eso hay tres niveles para que la app quede fijada en la pantalla, " +
         "de menos a más seguro. El primero se puede hacer ahora con los botones; los otros puedes leerlos más abajo. Todo es opcional.",
@@ -131,6 +140,13 @@ private val Es = Words(
         "3. Modo quiosco (la app como administradora del móvil): no se puede salir sin el adulto y sobrevive a los reinicios. " +
         "Requiere un móvil restaurado de fábrica, sin ninguna cuenta, y hacerlo una vez desde un ordenador. Esta versión de la app aún no lo incluye.\n\n" +
         "Para salir de una fijación: «Programación» → «Dejar de fijar».",
+    wifiTitle = "1. Wi-Fi",
+    wifiBody = "Este móvil funciona solo con Wi-Fi: no tiene número de teléfono ni datos móviles. Debe estar conectado al Wi-Fi de la casa donde se usará; sin eso no recibirá ni enviará mensajes. Comprueba que lo esté, o conéctalo ahora.",
+    wifiOn = "Conectado al Wi-Fi ✔", wifiOff = "Aún no está conectado a ningún Wi-Fi", wifiBtn = "Abrir los ajustes de Wi-Fi",
+    pinTitle = "4. Proteger Programación",
+    pinBody = "«Programación» es la pantalla donde se cambia la configuración de la app (contactos, sonido…). Solo debe hacerlo un adulto. Si quieres que nadie más pueda entrar (por ejemplo, los nietos), pon un PIN de 4 cifras: lo pedirá cada vez que alguien intente abrir Programación. No es el código para desbloquear el móvil. Es opcional.",
+    pinLabel = "PIN (4 cifras; vacío = sin PIN)",
+    pinNote = "Anótalo en un lugar seguro: si se olvida, la única forma de quitarlo es reinstalar la app, y se pierde la configuración.",
     doneTitle = "Todo listo", doneBody = "Ya puedes cerrar la guía. Todo se puede cambiar después desde «Programación».",
 )
 
@@ -142,7 +158,7 @@ private val En = Words(
         "This guide is optional: it gets the app ready using only this phone, no computer. " +
         "There are three things: connect a Telegram bot, add the person who will be talking, and, if you wish, " +
         "pin the app to the screen. You can skip it now and come back from \"Programming\".",
-    botTitle = "1. The Telegram bot",
+    botTitle = "2. The Telegram bot",
     botSteps = "Each phone has its own bot, which you create with whatever name you like.\n\n" +
         "In Telegram, search for @BotFather (the one with the blue verified badge).\n" +
         "Send it /newbot, choose a name and a username ending in \"bot\".\n" +
@@ -151,13 +167,13 @@ private val En = Words(
     alreadyBot = "This phone already has a bot. To keep it, leave the box empty and tap \"Next\".",
     paste = "Paste", checking = "Checking…",
     tokenBad = "It does not work: check it is the whole token and that there is internet.",
-    contactTitle = "2. Who will talk",
+    contactTitle = "3. Who will talk",
     contactSteps = "That person must open Telegram, search for %s, tap Start and write \"hello\". " +
         "Their name and number will then appear here by themselves. You can also type them in.",
     botRef = "the bot you created",
     nameLabel = "Name (shown on the button)", articleLabel = "Article before the name", numberLabel = "Telegram number",
     wrote = "Wrote: %s (%s)", useIt = "Use it", save = "Save this contact", saved = "Contact saved ✔",
-    fixTitle = "3. Pin the app",
+    fixTitle = "5. Pin the app",
     fixIntro = "To make the app easier for people who find phones hard to use, we suggest using this phone " +
         "only for this app. That is why there are three levels for keeping the app pinned to the screen, " +
         "from less to more secure. The first can be done now with the buttons; you can read the others below. All of it is optional.",
@@ -171,6 +187,13 @@ private val En = Words(
         "3. Kiosk mode (the app as the phone's administrator): it cannot be left without the adult and survives restarts. " +
         "It needs a factory-reset phone with no accounts, and doing it once from a computer. This version of the app does not include it yet.\n\n" +
         "To leave a pinned screen: \"Programming\" → \"Stop pinning\".",
+    wifiTitle = "1. Wi-Fi",
+    wifiBody = "This phone works only on Wi-Fi: it has no phone number or mobile data. It must be connected to the Wi-Fi of the house where it will be used; without that it will neither receive nor send messages. Check that it is, or connect it now.",
+    wifiOn = "Connected to Wi-Fi ✔", wifiOff = "Not connected to any Wi-Fi yet", wifiBtn = "Open Wi-Fi settings",
+    pinTitle = "4. Protect Programming",
+    pinBody = "\"Programming\" is the screen where the app's settings are changed (contacts, sound…). Only an adult should do it. If you want nobody else to get in (for example, the grandchildren), set a 4-digit PIN: it will be asked every time someone tries to open Programming. It is not the code that unlocks the phone. It is optional.",
+    pinLabel = "PIN (4 digits; empty = no PIN)",
+    pinNote = "Write it down somewhere safe: if forgotten, the only way to remove it is to reinstall the app, and the settings are lost.",
     doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\".",
 )
 
@@ -182,7 +205,7 @@ private val Fr = Words(
         "Ce guide est facultatif : il permet de préparer l'application avec ce seul téléphone, sans ordinateur. " +
         "Il y a trois choses à faire : connecter un bot Telegram, ajouter la personne avec qui l'on parlera " +
         "et, si vous le souhaitez, épingler l'application à l'écran. Vous pouvez le passer maintenant et y revenir depuis « Programmation ».",
-    botTitle = "1. Le bot Telegram",
+    botTitle = "2. Le bot Telegram",
     botSteps = "Chaque appareil a son propre bot, que vous créez avec le nom que vous voulez.\n\n" +
         "Dans Telegram, cherchez @BotFather (celui qui a le badge bleu de vérification).\n" +
         "Envoyez-lui /newbot, choisissez un nom et un identifiant se terminant par « bot ».\n" +
@@ -191,13 +214,13 @@ private val Fr = Words(
     alreadyBot = "Cet appareil a déjà un bot. Pour le garder, laissez la case vide et touchez « Suivant ».",
     paste = "Coller", checking = "Vérification…",
     tokenBad = "Cela ne fonctionne pas : vérifiez que c'est le jeton complet et qu'il y a internet.",
-    contactTitle = "2. Qui parlera",
+    contactTitle = "3. Qui parlera",
     contactSteps = "Cette personne doit ouvrir Telegram, chercher %s, toucher Start et écrire « bonjour ». " +
         "Dès qu'elle l'aura fait, son nom et son numéro apparaîtront ici tout seuls. Vous pouvez aussi les saisir à la main.",
     botRef = "le bot que vous avez créé",
     nameLabel = "Nom (affiché sur le bouton)", articleLabel = "Article devant le nom", numberLabel = "Numéro Telegram",
     wrote = "A écrit : %s (%s)", useIt = "Utiliser", save = "Enregistrer ce contact", saved = "Contact enregistré ✔",
-    fixTitle = "3. Épingler l'application",
+    fixTitle = "5. Épingler l'application",
     fixIntro = "Pour faciliter l'usage de l'application aux personnes qui ont du mal avec les téléphones, nous proposons d'utiliser " +
         "ce téléphone uniquement pour cette application. Il y a donc trois niveaux pour que l'application reste épinglée à l'écran, " +
         "du moins sûr au plus sûr. Le premier peut se faire maintenant avec les boutons ; vous pouvez lire les autres plus bas. Tout est facultatif.",
@@ -211,6 +234,13 @@ private val Fr = Words(
         "3. Mode kiosque (l'application comme administratrice du téléphone) : on ne peut pas en sortir sans l'adulte et il survit aux redémarrages. " +
         "Il faut un téléphone réinitialisé, sans aucun compte, et le faire une fois depuis un ordinateur. Cette version de l'application ne l'inclut pas encore.\n\n" +
         "Pour quitter un écran épinglé : « Programmation » → « Ne plus épingler ».",
+    wifiTitle = "1. Wi-Fi",
+    wifiBody = "Ce téléphone fonctionne uniquement en Wi-Fi : il n'a ni numéro de téléphone ni données mobiles. Il doit être connecté au Wi-Fi de la maison où il sera utilisé ; sinon il ne recevra ni n'enverra de messages. Vérifiez qu'il l'est, ou connectez-le maintenant.",
+    wifiOn = "Connecté au Wi-Fi ✔", wifiOff = "Pas encore connecté à un Wi-Fi", wifiBtn = "Ouvrir les réglages Wi-Fi",
+    pinTitle = "4. Protéger Programmation",
+    pinBody = "« Programmation » est l'écran où l'on modifie les réglages de l'application (contacts, son…). Seul un adulte doit le faire. Si vous voulez que personne d'autre n'y accède (par exemple les petits-enfants), mettez un code PIN à 4 chiffres : il sera demandé chaque fois que quelqu'un essaiera d'ouvrir Programmation. Ce n'est pas le code de déverrouillage du téléphone. C'est facultatif.",
+    pinLabel = "PIN (4 chiffres ; vide = sans PIN)",
+    pinNote = "Notez-le en lieu sûr : en cas d'oubli, le seul moyen de l'enlever est de réinstaller l'application, et les réglages sont perdus.",
     doneTitle = "Tout est prêt", doneBody = "Vous pouvez fermer le guide. Tout peut être modifié plus tard depuis « Programmation ».",
 )
 
@@ -231,6 +261,7 @@ fun TutorialScreen(
     onApply: () -> Unit,
     onHome: () -> Unit,
     onPin: () -> Unit,
+    onWifi: () -> Unit,
     onClose: () -> Unit,
 ) {
     val prefs = remember { Prefs(context) }
@@ -249,6 +280,8 @@ fun TutorialScreen(
     var number by remember { mutableStateOf("") }
     var saved by remember { mutableStateOf(false) }
     var showLevels by remember { mutableStateOf(false) }
+    var wifi by remember { mutableStateOf(wifiConnected(context)) }
+    var pin by remember { mutableStateOf(prefs.pin) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
 
     // The name of the bot in use, to tell the person which one to write to.
@@ -261,6 +294,7 @@ fun TutorialScreen(
     LaunchedEffect(Unit) {
         while (true) {
             stranger = prefs.stranger
+            wifi = wifiConnected(context)
             delay(2_000)
         }
     }
@@ -293,6 +327,16 @@ fun TutorialScreen(
                     Text(w.welcomeBody, fontSize = 19.sp, color = Color.DarkGray)
                 }
                 1 -> {
+                    Text(w.wifiTitle, fontSize = 30.sp, color = Color.Black)
+                    Text(w.wifiBody, fontSize = 19.sp, color = Color.DarkGray)
+                    Text(
+                        if (wifi) w.wifiOn else w.wifiOff,
+                        fontSize = 20.sp,
+                        color = if (wifi) Color(0xFF2E7D32) else Color(0xFFC62828),
+                    )
+                    OutlinedButton(onClick = onWifi) { Text(w.wifiBtn) }
+                }
+                2 -> {
                     Text(w.botTitle, fontSize = 30.sp, color = Color.Black)
                     Text(w.botSteps, fontSize = 19.sp, color = Color.DarkGray)
                     if (botName != null) Text(w.alreadyBot, fontSize = 17.sp, color = Color.DarkGray)
@@ -310,7 +354,7 @@ fun TutorialScreen(
                     if (checking) Text(w.checking, fontSize = 17.sp, color = Color.DarkGray)
                     if (tokenError) Text(w.tokenBad, fontSize = 17.sp, color = Color.Red)
                 }
-                2 -> {
+                3 -> {
                     Text(w.contactTitle, fontSize = 30.sp, color = Color.Black)
                     Text(w.contactSteps.format(botName?.let { "@$it" } ?: w.botRef), fontSize = 19.sp, color = Color.DarkGray)
                     stranger?.let { s ->
@@ -351,7 +395,18 @@ fun TutorialScreen(
                     ) { Text(w.save) }
                     if (saved) Text(w.saved, fontSize = 18.sp, color = Color(0xFF2E7D32))
                 }
-                3 -> {
+                4 -> {
+                    Text(w.pinTitle, fontSize = 30.sp, color = Color.Black)
+                    Text(w.pinBody, fontSize = 19.sp, color = Color.DarkGray)
+                    OutlinedTextField(
+                        value = pin, onValueChange = { pin = it.filter(Char::isDigit).take(4) },
+                        label = { Text(w.pinLabel) }, singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Text(w.pinNote, fontSize = 17.sp, color = Color.DarkGray)
+                }
+                5 -> {
                     Text(w.fixTitle, fontSize = 30.sp, color = Color.Black)
                     Text(w.fixIntro, fontSize = 19.sp, color = Color.DarkGray)
                     OutlinedButton(onClick = onHome) { Text(w.btnHome) }
@@ -369,12 +424,13 @@ fun TutorialScreen(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (step > 0) OutlinedButton(onClick = { step-- }) { Text(w.back) }
             Button(
-                enabled = !checking,
+                enabled = !checking && !(step == 4 && pin.length in 1..3),
                 modifier = Modifier.weight(1f),
                 onClick = {
                     when {
-                        step == 4 -> close()
-                        step == 1 && token.isNotEmpty() -> {
+                        step == 6 -> close()
+                        step == 4 -> { prefs.pin = pin; step++ }
+                        step == 2 && token.isNotEmpty() -> {
                             // A mistyped token would silently break everything: check it before keeping it.
                             checking = true
                             scope.launch {
@@ -397,7 +453,7 @@ fun TutorialScreen(
                         else -> step++
                     }
                 },
-            ) { Text(if (step == 4) w.finish else w.next, fontSize = 20.sp) }
+            ) { Text(if (step == 6) w.finish else w.next, fontSize = 20.sp) }
         }
     }
 }

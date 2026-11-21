@@ -50,7 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val Atkinson = FontFamily(
+internal val Atkinson = FontFamily(
     Font(R.font.atkinson_hyperlegible_regular),
     Font(R.font.atkinson_hyperlegible_bold, FontWeight.Bold),
 )
@@ -74,9 +74,9 @@ class MainActivity : ComponentActivity() {
         }
         config = AppConfig.load(this)
         val prefs = Prefs(this)
-        // First time with nobody to talk to: offer the guide, which can be skipped
-        // (and then is not offered again by itself).
-        if (!prefs.tutorialDone && config.activeContacts.none { it.telegramId != null }) screen = Screen.Tutorial
+        // The very first time after installing: the guide, which can be skipped
+        // (and then is not offered again by itself). Without it nobody would know how to set the app up.
+        if (!prefs.tutorialDone) screen = Screen.Tutorial
         // Shown over the lock screen and able to light the screen: it is a
         // mailbox that sits on a table, not a phone in a pocket.
         setShowWhenLocked(true)
@@ -120,12 +120,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             val state by messenger.state.collectAsState()
             when (screen) {
-                Screen.Tutorial -> TutorialScreen(
-                    context = this,
-                    onApply = applyConfig,
-                    onHome = chooseHome,
-                    onPin = ::pinScreen,
-                ) { screen = Screen.Home }
+                Screen.Tutorial -> androidx.compose.material3.ProvideTextStyle(
+                    androidx.compose.ui.text.TextStyle(fontFamily = Atkinson),
+                ) {
+                    TutorialScreen(
+                        context = this,
+                        onApply = applyConfig,
+                        onHome = chooseHome,
+                        onPin = ::pinScreen,
+                        onWifi = ::openWifi,
+                    ) { screen = Screen.Home }
+                }
                 Screen.Settings -> SettingsScreen(
                     context = this,
                     initial = AppConfig.load(this).contacts,
