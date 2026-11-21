@@ -1,0 +1,48 @@
+package cat.mariarosa.app
+
+import android.content.Context
+import org.json.JSONArray
+
+/**
+ * What an adult sets on the phone itself, in the programming screen, so the
+ * app can be prepared without a computer: the contacts, the sound, the PIN.
+ * It lives apart from config.json, which only holds what ships with the code.
+ */
+class Prefs(context: Context) {
+    private val p = context.applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+    var soundOn: Boolean
+        get() = p.getBoolean("sound", true)
+        set(v) = p.edit().putBoolean("sound", v).apply()
+
+    /** Empty = no PIN: the programming screen opens with a tap. */
+    var pin: String
+        get() = p.getString("pin", "") ?: ""
+        set(v) = p.edit().putString("pin", v).apply()
+
+    /** The contacts saved on the phone, or null if none were ever saved (the files apply). */
+    fun contacts(): List<Contact>? = try {
+        p.getString("contacts", null)?.let { s ->
+            val arr = JSONArray(s)
+            (0 until arr.length()).map { Contact.fromJson(arr.getJSONObject(it)) }
+        }
+    } catch (e: Exception) {
+        null
+    }
+
+    fun saveContacts(list: List<Contact>) {
+        val arr = JSONArray()
+        list.forEach { arr.put(it.toJson()) }
+        p.edit().putString("contacts", arr.toString()).apply()
+    }
+
+    /** The last person the bot did not know who wrote to it: offered in the programming screen. */
+    data class Stranger(val chatId: Long, val name: String)
+
+    var stranger: Stranger?
+        get() = p.getString("stranger", null)?.let {
+            val i = it.indexOf('|')
+            if (i < 0) null else it.substring(0, i).toLongOrNull()?.let { id -> Stranger(id, it.substring(i + 1)) }
+        }
+        set(v) = p.edit().apply { if (v == null) remove("stranger") else putString("stranger", "${v.chatId}|${v.name}") }.apply()
+}

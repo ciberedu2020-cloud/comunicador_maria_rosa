@@ -23,7 +23,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +54,10 @@ private val Atkinson = FontFamily(
 )
 
 class MainActivity : ComponentActivity() {
+    private var config by mutableStateOf(AppConfig.Fallback)
+    private var inSettings by mutableStateOf(false)
+    private var askPin by mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // The screen is a mailbox: it stays on, and the volume is high so the
@@ -53,7 +67,10 @@ class MainActivity : ComponentActivity() {
             setStreamVolume(AudioManager.STREAM_MUSIC, getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
             setStreamVolume(AudioManager.STREAM_ALARM, getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
         }
-        val config = AppConfig.load(this)
+        config = AppConfig.load(this)
+        // First time with nobody to talk to: go straight to the programming
+        // screen, so the phone can be prepared without a computer.
+        inSettings = config.activeContacts.none { it.telegramId != null }
         // Shown over the lock screen and able to light the screen: it is a
         // mailbox that sits on a table, not a phone in a pocket.
         setShowWhenLocked(true)
@@ -77,10 +94,38 @@ class MainActivity : ComponentActivity() {
         startForegroundService(Intent(this, MessengerService::class.java))
         val messenger = Messenger.get(this)
         messenger.start()
+        val prefs = Prefs(this)
         setContent {
             val state by messenger.state.collectAsState()
-            Home(config, state, messenger::onTap, messenger::onReplyTap, messenger::onCancelSend)
+            if (inSettings) {
+                SettingsScreen(
+                    context = this,
+                    initial = AppConfig.load(this).contacts,
+                    firstTime = config.activeContacts.none { it.telegramId != null },
+                ) {
+                    config = AppConfig.load(this)
+                    messenger.reload(config)
+                    inSettings = false
+                }
+            } else {
+                Home(
+                    config, state, messenger::onTap, messenger::onReplyTap, messenger::onCancelSend,
+                    messenger::onSendNow,
+                ) {
+                    if (prefs.pin.isEmpty()) openSettings(messenger) else askPin = true
+                }
+            }
+            if (askPin) PinDialog(prefs.pin, onClose = { askPin = false }) {
+                askPin = false
+                openSettings(messenger)
+            }
         }
+    }
+
+    /** A recording waiting to be sent is thrown away: the adult is here to program, not to talk. */
+    private fun openSettings(messenger: Messenger) {
+        messenger.onCancelSend()
+        inSettings = true
     }
 
     /** Asks Android not to put the app to sleep to save battery. Asked until it is granted. */
@@ -111,6 +156,8 @@ private fun Home(
     onTap: (String) -> Unit,
     onReply: (String) -> Unit,
     onCancel: () -> Unit,
+    onSendNow: () -> Unit,
+    onSettings: () -> Unit,
 ) {
     val contacts = config.activeContacts
     Column(
@@ -120,6 +167,17 @@ private fun Home(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        if (state.countdown != null) {
+            // Only while a reply waits to be sent: a small door for the adult, out of the way.
+            Text(
+                "⚙ Programació",
+                color = Color.LightGray,
+                fontFamily = Atkinson,
+                fontSize = 18.sp,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth().clickable { onSettings() }.padding(vertical = 4.dp),
+            )
+        }
         if (contacts.isEmpty()) {
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text("Sense contactes", color = Color.White, fontFamily = Atkinson, fontSize = 32.sp)
@@ -130,8 +188,9 @@ private fun Home(
             val playing = state.playingContact == contact.id
             val (colour, title, subtitle) = when {
                 playing -> Triple(Blue, "Escoltant…", "Toca per parar")
-                waiting > 0 -> Triple(Green, "Missatge nou de ${contact.name}", "Toca aquí per escoltar")
-                else -> Triple(Yellow, contact.name, "Cap missatge nou")
+                waiting > 0 -> Triple(Green, "Missatge nou ${contact.ofFull}", "Toca aquí per escoltar")
+                contacts.size == 1 -> Triple(Yellow, "Hola!", "Cap missatge nou")
+                else -> Triple(Yellow, contact.fullCapital, "Cap missatge nou")
             }
             Box(
                 modifier = Modifier
@@ -162,10 +221,10 @@ private fun Home(
                         "Toca per enviar",
                     )
                     state.notice == Notice.Sending -> Triple(Blue, "Enviant…", "")
-                    state.notice == Notice.Sent -> Triple(Green, "Enviat ✔", "${contact.name} ho rebrà")
+                    state.notice == Notice.Sent -> Triple(Green, "Enviat ✔", "${contact.fullCapital} ho rebrà")
                     state.notice == Notice.Failed -> Triple(Orange, "No s'ha pogut enviar", "Torna-ho a provar")
                     state.notice == Notice.Discarded -> Triple(Light, "Esborrat", "No s'ha enviat")
-                    else -> Triple(Light, "Respon a ${contact.name}", "Toca i parla")
+                    else -> Triple(Light, "Respon a ${contact.full}", "Toca i parla")
                 }
                 val countdown = state.countdown
                 if (countdown != null) {
@@ -179,7 +238,8 @@ private fun Home(
                                 .weight(2f)
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(24.dp))
-                                .background(Orange),
+                                .background(Orange)
+                                .clickable { onSendNow() },
                             contentAlignment = Alignment.Center,
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
@@ -192,7 +252,7 @@ private fun Home(
                                     textAlign = TextAlign.Center,
                                 )
                                 Text(
-                                    "Toca la X per esborrar-lo",
+                                    "Toca aquí per enviar ara · X per esborrar",
                                     color = Color.Black,
                                     fontFamily = Atkinson,
                                     fontSize = 24.sp,
@@ -249,4 +309,31 @@ private fun Home(
             )
         }
     }
+}
+
+/** Asks for the PIN before the programming screen. */
+@Composable
+private fun PinDialog(pin: String, onClose: () -> Unit, onOk: () -> Unit) {
+    var typed by androidx.compose.runtime.remember { mutableStateOf("") }
+    var wrong by androidx.compose.runtime.remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = { Text("PIN") },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = typed,
+                    onValueChange = { typed = it.filter(Char::isDigit); wrong = false },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                )
+                if (wrong) {
+                    Spacer(Modifier.height(8.dp))
+                    Text("PIN incorrecte", color = Color.Red)
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { if (typed == pin) onOk() else wrong = true }) { Text("Entra") } },
+        dismissButton = { TextButton(onClick = onClose) { Text("Cancel·la") } },
+    )
 }

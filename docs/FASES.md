@@ -10,6 +10,11 @@ Tornar enrere és desactivar un interruptor a `config.json`.
 4. Més contactes, un a la vegada.
 5. Opcionals: fotos enviades, vídeo, pregunta a la IA.
 
+## Pendent de la fase 2
+
+- Probar al mòbil: botó «enviar ara», pantalla de programació amb PIN, so desactivat i alta d'un contacte desconegut.
+- Pantalla apagada per defecte i desperta amb el botó lateral (vegeu `README.md`, «Pendent»).
+
 ## Registre
 
 El registre de proves de cada instal·lació és personal i no es publica. Apunteu aquí el que ha funcionat i el que no a cada fase.

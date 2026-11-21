@@ -44,8 +44,9 @@ data class UiState(
  * One instance for the whole process, so a rotated or recreated screen never
  * starts a second poller (Telegram refuses two at once).
  */
-class Messenger private constructor(context: Context, private val config: AppConfig) {
+class Messenger private constructor(context: Context, @Volatile private var config: AppConfig) {
     private val app = context.applicationContext
+    private val prefs = Prefs(app)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val client = TelegramClient(BuildConfig.TELEGRAM_TOKEN)
     private val inbox = Inbox(app)
@@ -67,6 +68,8 @@ class Messenger private constructor(context: Context, private val config: AppCon
     private var noticeJob: Job? = null
     private var countdownJob: Job? = null
     private var pendingFile: File? = null
+    private var pendingSend: Triple<Long, File, Int>? = null
+    private var countdownStartedAt = 0L
 
     // The chime is our own sound, not the phone's notification sound: on some
     // phones (this Xiaomi) that setting is empty and the "chime" is silent.
@@ -74,7 +77,7 @@ class Messenger private constructor(context: Context, private val config: AppCon
 
     private fun playChime() {
         // Never ring over her own recording.
-        if (_state.value.recording) return
+        if (_state.value.recording || !prefs.soundOn) return
         try {
             stopChime()
             val mp = MediaPlayer()
@@ -120,6 +123,11 @@ class Messenger private constructor(context: Context, private val config: AppCon
     private fun stopChime() {
         chimePlayer?.runCatching { stop(); release() }
         chimePlayer = null
+    }
+
+    /** The programming screen changed the contacts: use them from now on. */
+    fun reload(newConfig: AppConfig) {
+        config = newConfig
     }
 
     fun start() {
@@ -306,6 +314,8 @@ class Messenger private constructor(context: Context, private val config: AppCon
             return
         }
         pendingFile = file
+        pendingSend = Triple(chatId, file, secs)
+        countdownStartedAt = SystemClock.elapsedRealtime()
         countdownJob?.cancel()
         countdownJob = scope.launch {
             for (n in wait downTo 1) {
@@ -314,8 +324,25 @@ class Messenger private constructor(context: Context, private val config: AppCon
             }
             _state.value = _state.value.copy(countdown = null)
             pendingFile = null
+            pendingSend = null
             upload(chatId, file, secs)
         }
+    }
+
+    /**
+     * Tapping the count itself: send now, no more waiting. Ignored for the
+     * first moment, so the double tap that ended the recording cannot also send it.
+     */
+    fun onSendNow() {
+        val send = pendingSend ?: return
+        if (_state.value.countdown == null) return
+        if (SystemClock.elapsedRealtime() - countdownStartedAt < 1_500) return
+        countdownJob?.cancel()
+        countdownJob = null
+        pendingFile = null
+        pendingSend = null
+        _state.value = _state.value.copy(countdown = null)
+        upload(send.first, send.second, send.third)
     }
 
     /** The X: throws the recording away instead of sending it. */
@@ -325,6 +352,7 @@ class Messenger private constructor(context: Context, private val config: AppCon
         countdownJob = null
         pendingFile?.delete()
         pendingFile = null
+        pendingSend = null
         _state.value = _state.value.copy(countdown = null)
         showNotice(Notice.Discarded)
     }
@@ -383,7 +411,10 @@ class Messenger private constructor(context: Context, private val config: AppCon
         val chatId = msg.getJSONObject("chat").getLong("id")
         val contact = config.activeContacts.firstOrNull { it.telegramId == chatId }
         if (contact == null) {
-            // Someone not approved: tell them their number, so the owner can approve it.
+            // Someone not approved: tell them their number, and keep it so the
+            // programming screen can offer to add them with one tap.
+            val from = msg.optJSONObject("from")?.optString("first_name", "").orEmpty()
+            prefs.stranger = Prefs.Stranger(chatId, from.ifBlank { "Contacte" })
             runCatching {
                 client.sendMessage(chatId, "Aquest aparell encara no et coneix. El teu identificador és $chatId.")
             }

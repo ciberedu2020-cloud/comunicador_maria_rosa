@@ -10,7 +10,40 @@ data class Contact(
     val active: Boolean,
     /** Telegram chat number of this person; null until they have been approved. */
     val telegramId: Long? = null,
-)
+    /** "la", "el", "l'" or "en": goes before the name ("Respon a la Maria"). Empty for none. */
+    val article: String = "",
+) {
+    /** The name as said after "a": "la Maria", "l'Eloi", "en Joan". */
+    val full: String get() = when {
+        article.isEmpty() -> name
+        article.endsWith("'") -> article + name
+        else -> "$article $name"
+    }
+
+    /** The name as said after "de": "de la Maria", "de l'Eloi", "d'en Joan". */
+    val ofFull: String get() = when {
+        article == "en" -> "d'en $name"
+        article.isEmpty() -> if (name.firstOrNull()?.lowercaseChar()?.let { it in "aeiouàèéíòóú" } == true) "d'$name" else "de $name"
+        else -> "de $full"
+    }
+
+    /** The name at the start of a sentence: "La Maria", "L'Eloi", "En Joan". */
+    val fullCapital: String get() = full.replaceFirstChar { it.uppercase() }
+
+    fun toJson(): JSONObject = JSONObject()
+        .put("id", id).put("name", name).put("active", active).put("article", article)
+        .also { if (telegramId != null) it.put("telegramId", telegramId) }
+
+    companion object {
+        fun fromJson(c: JSONObject) = Contact(
+            c.getString("id"),
+            c.getString("name"),
+            c.optBoolean("active", false),
+            if (c.has("telegramId")) c.getLong("telegramId") else null,
+            c.optString("article", ""),
+        )
+    }
+}
 
 /**
  * Each phase of the plan is a switch here. Going back a phase is turning a
@@ -49,13 +82,7 @@ data class AppConfig(
             )
             val arr = root.getJSONArray("contacts")
             val contacts = (0 until arr.length()).map {
-                val c = arr.getJSONObject(it)
-                Contact(
-                    c.getString("id"),
-                    c.getString("name"),
-                    c.optBoolean("active", false),
-                    if (c.has("telegramId")) c.getLong("telegramId") else null,
-                )
+                Contact.fromJson(arr.getJSONObject(it))
             }
             return AppConfig(features, contacts, root.optInt("sendDelaySeconds", 5))
         }
@@ -70,7 +97,10 @@ data class AppConfig(
             } else {
                 "config.json"
             }
-            parse(context.assets.open(name).bufferedReader().use { it.readText() })
+            val base = parse(context.assets.open(name).bufferedReader().use { it.readText() })
+            // What was set on the phone itself (the programming screen) wins over the files.
+            val onPhone = Prefs(context).contacts()
+            if (onPhone != null) base.copy(contacts = onPhone) else base
         } catch (e: Exception) {
             Fallback
         }

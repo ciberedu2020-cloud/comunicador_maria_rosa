@@ -44,6 +44,10 @@ class TelegramClient(private val token: String) {
             (timeoutSec + 15) * 1000,
         ).getJSONArray("result")
 
+    /** The bot's own user name, so the programming screen can say who to write to. */
+    fun botUsername(): String =
+        call("getMe", emptyMap(), 15_000).getJSONObject("result").optString("username")
+
     fun sendMessage(chatId: Long, text: String) {
         call("sendMessage", mapOf("chat_id" to chatId.toString(), "text" to text), 15_000)
     }

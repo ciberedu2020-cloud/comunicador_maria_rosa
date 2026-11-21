@@ -20,8 +20,14 @@ s'escolta amb un toc.
 - **Escoltar:** un toc al botó verd reprodueix la nota. Un altre toc la para. Si no n'hi ha de nova,
   un toc repeteix l'última. Qui ha enviat rep al Telegram «✔ Ho ha escoltat».
 - **Respondre:** botó de baix. Un toc comença a gravar (vermell, amb el temps), un altre toc acaba.
-  Després hi ha **5 segons per canviar d'idea**: una **X vermella** esborra la nota; si no es toca, s'envia sola.
+  Després hi ha **5 segons de compte enrere**: el botó taronja **«Toca aquí per enviar ara»** l'envia a l'acte
+  (ignora el primer segon i mig, perquè un doble toc no l'envii sense voler); una **X vermella** esborra la nota;
+  si no es toca res, s'envia sola.
 - **Només veu**, als dos sentits. Si algú escriu text, el bot respon que de moment només rep notes de veu.
+- **Programació, sense ordinador:** durant el compte enrere surt a dalt, petit, «⚙ Programació». Hi ha el nom i
+  l'article de cada contacte, el número de Telegram, so d'avís sí/no, PIN opcional i un accés als ajustos de Wi-Fi.
+  Entrar-hi **esborra la nota que esperava** (qui programa no parla). La primera vegada, si no hi ha cap contacte amb número,
+  l'app s'obre directament aquí. Si algú desconegut escriu al bot, apareix a la pantalla amb un botó per afegir-lo.
 - Si no hi ha internet, ho diu a la pantalla: «Sense connexió a internet».
 - Es manté en marxa amb la pantalla apagada (servei en primer pla) i **arrenca sola** quan es reinicia el mòbil.
 
@@ -44,7 +50,7 @@ s'escolta amb un toc.
   "sendDelaySeconds": 5,
   "features": { "listen": true, "reply": true, "photos": false, "text": false },
   "contacts": [
-    { "id": "familiar", "name": "Familiar", "active": true, "telegramId": 123456789 }
+    { "id": "familiar", "name": "Familiar", "article": "", "active": true, "telegramId": 123456789 }
   ]
 }
 ```
@@ -54,6 +60,8 @@ s'escolta amb un toc.
   si és massa per a la persona: no cal tocar el codi, només canviar-ho i tornar a instal·lar.
 - `contacts`: només es mostren els `active: true`. El `telegramId` és el número de xat de la persona.
   El **nom és el que surt al botó**. Sense `telegramId`, l'aparell respon a qui li escrigui amb el seu número, perquè l'hi puguis posar.
+- `article`: «la», «el», «l'» o «en» (o buit). Serveix per dir «Respon a la Maria», «Missatge nou de l'Eloi».
+- Els contactes desats **a la pantalla de programació** del mòbil tenen prioritat sobre aquest fitxer.
 - `config.local.json` (mateixa carpeta, **no es puja a git**) té prioritat sobre `config.json`: aquí hi va la teva configuració real.
 
 ## Posar en marxa el bot (una sola vegada)
@@ -121,6 +129,11 @@ Perquè `adb` el vegi: opcions de desenvolupador → **Depuració per USB**, i a
 
 ## Pendent
 
+- **Pantalla apagada per defecte** (es decidirà i es provarà amb el mòbil definitiu): es desperta **només amb el botó lateral**
+  (el toc depèn d'un ajust del sistema); amb un missatge nou s'encén i **no s'apaga fins que s'escolta**; després queda
+  **10 minuts** encesa (`screenOnMinutes` a `config.json`) i es torna a apagar. Cal que el mòbil no tingui bloqueig de pantalla.
+  Sense mode quiosc, l'apagat és el temps d'espera del sistema més els 10 minuts, no exacte.
+  Risc: un missatge que ningú escolta deixa la pantalla encesa tota la nit.
 - **Mode quiosc:** app administradora del dispositiu, amb sortida oculta només per a adults (p. ex. cinc tocs i un PIN)
   per arribar als ajustos de Wi-Fi. Cal un aparell que es pugui restaurar de fàbrica, sense comptes.
 - Pantalla que baixi la brillantor o s'apagui de nit (evita marcar-la i gastar bateria).
