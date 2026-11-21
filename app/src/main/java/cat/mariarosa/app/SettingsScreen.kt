@@ -65,6 +65,7 @@ fun SettingsScreen(
     onUnpin: () -> Unit,
     onHome: () -> Unit,
     onTutorial: () -> Unit,
+    onBattery: () -> Unit,
     onDone: () -> Unit,
 ) {
     val prefs = remember { Prefs(context) }
@@ -73,6 +74,7 @@ fun SettingsScreen(
             addAll(initial.map { Draft(it.id, it.name, it.article, it.telegramId?.toString() ?: "", it.active) })
         }
     }
+    var showLevels by remember { mutableStateOf(false) }
     var sound by remember { mutableStateOf(prefs.soundOn) }
     var pin by remember { mutableStateOf(prefs.pin) }
     var botName by remember { mutableStateOf<String?>(null) }
@@ -95,8 +97,8 @@ fun SettingsScreen(
         Text("Programació", fontSize = 32.sp, color = Color.Black)
         OutlinedButton(onClick = onTutorial) { Text("Obre la guia de configuració") }
         Text(
-            if (botName != null) "Perquè algú hi parli, ha d'escriure «hola» a Telegram al bot @$botName i tocar Start."
-            else "No es pot saber el nom del bot: comprova la connexió a internet.",
+            if (botName != null) "Bot de Telegram: @$botName. Qui hi vulgui parlar ha d'escriure «hola» a aquest bot i tocar Start."
+            else "Bot de Telegram: pendent de configurar (o sense internet). Obre la guia de configuració.",
             fontSize = 18.sp,
             color = Color.DarkGray,
         )
@@ -172,15 +174,15 @@ fun SettingsScreen(
         )
 
         Text("Fixar l'app", fontSize = 24.sp, color = Color.Black)
-        Text(
-            "Perquè quedi sempre a la pantalla. Per sortir-ne, aquí «Deixa de fixar». Després d'un reinici s'ha de tornar a fixar.",
-            fontSize = 16.sp, color = Color.DarkGray,
-        )
+        Text(Ca.fixIntro, fontSize = 16.sp, color = Color.DarkGray)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = onPin) { Text("Fixa l'app") }
             OutlinedButton(onClick = onUnpin) { Text("Deixa de fixar") }
         }
+        OutlinedButton(onClick = { showLevels = !showLevels }) { Text(if (showLevels) Ca.levelsHide else Ca.levelsShow) }
+        if (showLevels) Text(Ca.fixLevels, fontSize = 16.sp, color = Color.DarkGray)
         OutlinedButton(onClick = onHome) { Text("Que el botó d'inici torni a l'app") }
+        OutlinedButton(onClick = onBattery) { Text("Torna a demanar l'exempció de bateria") }
         OutlinedButton(onClick = onWifi) { Text("Obre els ajustos de Wi-Fi") }
 
         Button(onClick = {

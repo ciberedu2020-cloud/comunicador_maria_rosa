@@ -31,10 +31,13 @@ s'escolta amb un toc.
 - **Dos o més contactes:** cada contacte té els seus botons. Quan en graves un, només es posa en vermell (i després en
   taronja/verd) el botó d'aquell contacte; els altres no fan res mentre dura. L'avís sonor és el mateix per a tots.
 - **Guia de configuració (opcional):** la primera vegada, si no hi ha cap contacte amb número, s'ofereix una guia en
-  català, castellà o anglès. Explica com crear el bot amb @BotFather i enganxar-ne el token (es comprova abans de desar-lo),
+  català, castellà, anglès o francès. Explica com crear el bot amb @BotFather i enganxar-ne el token (es comprova abans de desar-lo),
   com afegir la persona (nom, article i número, que també surt sol quan ella escriu al bot) i com fixar l'app a la pantalla.
+  Cada aparell té el seu bot, que crea qui el prepara amb el nom que vulgui; el text de la guia i de Programació
+  mostra el nom del bot que realment s'està fent servir, o «pendent» si encara no n'hi ha cap.
+  La pregunta de la bateria només es fa un cop, en instal·lar; es pot tornar a demanar des de Programació.
   Es pot saltar a qualsevol pas; si es salta, no torna a sortir sola. Sempre es pot reobrir des de «Programació».
-  Només la guia és multillenguatge; la resta de pantalles estan en català.
+  Només la guia és multillenguatge (ca/es/en/fr); la resta de pantalles estan en català.
 - **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
   i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
   No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.

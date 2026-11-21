@@ -41,41 +41,49 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 /** The words of the first-time guide in one language. %s marks where a name or number goes. */
-private class Words(
+internal class Words(
     val skip: String, val back: String, val next: String, val finish: String,
     val welcomeTitle: String, val welcomeBody: String,
     val botTitle: String, val botSteps: String, val tokenLabel: String, val alreadyBot: String,
-    val paste: String, val checking: String, val tokenOk: String, val tokenBad: String,
-    val contactTitle: String, val contactSteps: String, val nameLabel: String,
+    val paste: String, val checking: String, val tokenBad: String,
+    val contactTitle: String, val contactSteps: String, val botRef: String, val nameLabel: String,
     val articleLabel: String, val numberLabel: String, val wrote: String, val useIt: String,
     val save: String, val saved: String,
-    val fixTitle: String, val fixBody: String, val btnHome: String, val btnPin: String, val fixNote: String,
+    val fixTitle: String, val fixIntro: String, val btnHome: String, val btnPin: String,
+    val levelsShow: String, val levelsHide: String, val fixLevels: String,
     val doneTitle: String, val doneBody: String,
 )
 
-private val Ca = Words(
+internal val Ca = Words(
     skip = "Salta la guia", back = "Enrere", next = "Següent", finish = "Acaba",
     welcomeTitle = "Preparem l'aparell",
-    welcomeBody = "Aquesta guia és opcional: serveix per deixar l'app a punt amb només aquest mòbil, " +
-        "sense ordinador. Tens tres coses a fer: connectar un bot de Telegram, afegir la persona amb qui es parlarà " +
+    welcomeBody = "Aquesta aplicació està pensada per a persones que tenen dificultats per fer servir un mòbil, " +
+        "i permet comunicar-se per veu amb uns pocs usuaris.\n\n" +
+        "Aquesta guia és opcional: serveix per deixar l'app a punt amb només aquest mòbil, sense ordinador. " +
+        "Hi ha tres coses a fer: connectar un bot de Telegram, afegir la persona amb qui es parlarà " +
         "i, si vols, fixar l'app a la pantalla. Pots saltar-la ara i tornar-hi des de «Programació».",
     botTitle = "1. El bot de Telegram",
-    botSteps = "A Telegram, busca @BotFather (el que té el segell blau de verificat).\n" +
+    botSteps = "Cada aparell té el seu propi bot, que crees tu amb el nom que vulguis.\n\n" +
+        "A Telegram, busca @BotFather (el que té el segell blau de verificat).\n" +
         "Envia-li /newbot, tria un nom i un usuari que acabi en «bot».\n" +
         "Et donarà un token (una cadena llarga amb dos punts). Copia'l i enganxa'l aquí sota. No el mostris a ningú.",
-    tokenLabel = "Token del bot", alreadyBot = "Aquest aparell ja té un bot. Si no en vols canviar, deixa la casella buida i toca «Següent».",
-    paste = "Enganxa", checking = "Comprovant…", tokenOk = "Bot connectat: @%s", tokenBad = "No funciona: comprova que sigui el token sencer i que hi hagi internet.",
+    tokenLabel = "Token del bot",
+    alreadyBot = "Aquest aparell ja té un bot. Si no en vols canviar, deixa la casella buida i toca «Següent».",
+    paste = "Enganxa", checking = "Comprovant…",
+    tokenBad = "No funciona: comprova que sigui el token sencer i que hi hagi internet.",
     contactTitle = "2. Qui hi parlarà",
-    contactSteps = "Aquesta persona ha d'obrir Telegram, buscar el bot @%s, tocar Start i escriure «hola». " +
+    contactSteps = "Aquesta persona ha d'obrir Telegram, buscar %s, tocar Start i escriure «hola». " +
         "Quan ho faci, el seu nom i número apareixeran aquí sols. També pots escriure'ls a mà.",
+    botRef = "el bot que has creat",
     nameLabel = "Nom (surt al botó)", articleLabel = "Article davant del nom", numberLabel = "Número de Telegram",
     wrote = "Ha escrit: %s (%s)", useIt = "Fes-lo servir", save = "Desa aquest contacte", saved = "Contacte desat ✔",
     fixTitle = "3. Fixar l'app",
-    fixBody = "Perquè l'app quedi sempre a la pantalla i no es tregui fàcilment. És opcional. " +
-        "No és un bloqueig total (això requereix un mode especial), però dificulta que algú surti per error.",
+    fixIntro = "Per facilitar l'ús de l'app a persones a qui costa fer servir els mòbils, proposem fer servir " +
+        "aquest mòbil exclusivament per a aquesta aplicació. Per això hi ha tres nivells perquè l'app quedi fixada a la pantalla, " +
+        "de menys a més segur. El primer es pot fer ara amb els botons; els altres els pots llegir més avall. Tot és opcional.",
     btnHome = "Que el botó d'inici torni a l'app", btnPin = "Fixa l'app a la pantalla",
-    fixNote = "Tres nivells, de menys a més segur:\n\n" +
-        "1. Fixar l'app (els botons de dalt). Es pot sortir mantenint premuts Enrere i Recents (el gest pot variar segons el mòbil) " +
+    levelsShow = "Veure els tres nivells", levelsHide = "Amaga els nivells",
+    fixLevels = "1. Fixar l'app (els botons de dalt). Es pot sortir mantenint premuts Enrere i Recents (el gest pot variar segons el mòbil) " +
         "i s'ha de tornar a fixar després d'un reinici. Va bé contra tocs sense voler, no contra algú que ho sàpiga.\n\n" +
         "2. Fixar l'app i posar un bloqueig de pantalla amb PIN; als ajustos d'Android, activar que demani el PIN abans de deixar de fixar " +
         "(el nom de l'opció varia). Compte: amb bloqueig de pantalla, en despertar el mòbil pot demanar el PIN abans de mostrar l'app. " +
@@ -89,26 +97,33 @@ private val Ca = Words(
 private val Es = Words(
     skip = "Saltar la guía", back = "Atrás", next = "Siguiente", finish = "Terminar",
     welcomeTitle = "Preparamos el aparato",
-    welcomeBody = "Esta guía es opcional: sirve para dejar la app lista solo con este móvil, sin ordenador. " +
+    welcomeBody = "Esta aplicación está pensada para personas con dificultades para usar un móvil, " +
+        "y permite comunicarse por voz con unos pocos usuarios.\n\n" +
+        "Esta guía es opcional: sirve para dejar la app lista solo con este móvil, sin ordenador. " +
         "Hay tres cosas: conectar un bot de Telegram, añadir a la persona con quien se hablará y, si quieres, " +
         "fijar la app en la pantalla. Puedes saltarla ahora y volver desde «Programación».",
     botTitle = "1. El bot de Telegram",
-    botSteps = "En Telegram, busca @BotFather (el que tiene el sello azul de verificado).\n" +
+    botSteps = "Cada aparato tiene su propio bot, que creas tú con el nombre que quieras.\n\n" +
+        "En Telegram, busca @BotFather (el que tiene el sello azul de verificado).\n" +
         "Envíale /newbot, elige un nombre y un usuario que acabe en «bot».\n" +
         "Te dará un token (una cadena larga con dos puntos). Cópialo y pégalo aquí abajo. No se lo enseñes a nadie.",
-    tokenLabel = "Token del bot", alreadyBot = "Este aparato ya tiene un bot. Si no quieres cambiarlo, deja la casilla vacía y toca «Siguiente».",
-    paste = "Pegar", checking = "Comprobando…", tokenOk = "Bot conectado: @%s", tokenBad = "No funciona: comprueba que sea el token entero y que haya internet.",
+    tokenLabel = "Token del bot",
+    alreadyBot = "Este aparato ya tiene un bot. Si no quieres cambiarlo, deja la casilla vacía y toca «Siguiente».",
+    paste = "Pegar", checking = "Comprobando…",
+    tokenBad = "No funciona: comprueba que sea el token entero y que haya internet.",
     contactTitle = "2. Quién hablará",
-    contactSteps = "Esa persona debe abrir Telegram, buscar el bot @%s, tocar Start y escribir «hola». " +
+    contactSteps = "Esa persona debe abrir Telegram, buscar %s, tocar Start y escribir «hola». " +
         "Cuando lo haga, su nombre y número aparecerán aquí solos. También puedes escribirlos a mano.",
+    botRef = "el bot que has creado",
     nameLabel = "Nombre (sale en el botón)", articleLabel = "Artículo delante del nombre", numberLabel = "Número de Telegram",
     wrote = "Ha escrito: %s (%s)", useIt = "Usar", save = "Guardar este contacto", saved = "Contacto guardado ✔",
     fixTitle = "3. Fijar la app",
-    fixBody = "Para que la app quede siempre en la pantalla y no se salga fácilmente. Es opcional. " +
-        "No es un bloqueo total (eso requiere un modo especial), pero dificulta salir por error.",
+    fixIntro = "Para facilitar el uso de la app a personas a quienes les cuesta usar el móvil, proponemos usar " +
+        "este móvil exclusivamente para esta aplicación. Por eso hay tres niveles para que la app quede fijada en la pantalla, " +
+        "de menos a más seguro. El primero se puede hacer ahora con los botones; los otros puedes leerlos más abajo. Todo es opcional.",
     btnHome = "Que el botón de inicio vuelva a la app", btnPin = "Fijar la app en la pantalla",
-    fixNote = "Tres niveles, de menos a más seguro:\n\n" +
-        "1. Fijar la app (los botones de arriba). Se puede salir manteniendo pulsados Atrás y Recientes (el gesto puede variar según el móvil) " +
+    levelsShow = "Ver los tres niveles", levelsHide = "Ocultar los niveles",
+    fixLevels = "1. Fijar la app (los botones de arriba). Se puede salir manteniendo pulsados Atrás y Recientes (el gesto puede variar según el móvil) " +
         "y hay que volver a fijarla tras un reinicio. Sirve contra toques sin querer, no contra alguien que lo sepa.\n\n" +
         "2. Fijar la app y poner un bloqueo de pantalla con PIN; en los ajustes de Android, activar que pida el PIN antes de dejar de fijar " +
         "(el nombre de la opción varía). Ojo: con bloqueo de pantalla, al despertar el móvil puede pedir el PIN antes de mostrar la app. " +
@@ -122,26 +137,33 @@ private val Es = Words(
 private val En = Words(
     skip = "Skip the guide", back = "Back", next = "Next", finish = "Finish",
     welcomeTitle = "Let's set up the phone",
-    welcomeBody = "This guide is optional: it gets the app ready using only this phone, no computer. " +
+    welcomeBody = "This app is meant for people who have difficulty using a phone, " +
+        "and lets them communicate by voice with a few people.\n\n" +
+        "This guide is optional: it gets the app ready using only this phone, no computer. " +
         "There are three things: connect a Telegram bot, add the person who will be talking, and, if you wish, " +
         "pin the app to the screen. You can skip it now and come back from \"Programming\".",
     botTitle = "1. The Telegram bot",
-    botSteps = "In Telegram, search for @BotFather (the one with the blue verified badge).\n" +
+    botSteps = "Each phone has its own bot, which you create with whatever name you like.\n\n" +
+        "In Telegram, search for @BotFather (the one with the blue verified badge).\n" +
         "Send it /newbot, choose a name and a username ending in \"bot\".\n" +
         "It will give you a token (a long string with a colon). Copy it and paste it below. Do not show it to anyone.",
-    tokenLabel = "Bot token", alreadyBot = "This phone already has a bot. To keep it, leave the box empty and tap \"Next\".",
-    paste = "Paste", checking = "Checking…", tokenOk = "Bot connected: @%s", tokenBad = "It does not work: check it is the whole token and that there is internet.",
+    tokenLabel = "Bot token",
+    alreadyBot = "This phone already has a bot. To keep it, leave the box empty and tap \"Next\".",
+    paste = "Paste", checking = "Checking…",
+    tokenBad = "It does not work: check it is the whole token and that there is internet.",
     contactTitle = "2. Who will talk",
-    contactSteps = "That person must open Telegram, search for the bot @%s, tap Start and write \"hello\". " +
+    contactSteps = "That person must open Telegram, search for %s, tap Start and write \"hello\". " +
         "Their name and number will then appear here by themselves. You can also type them in.",
+    botRef = "the bot you created",
     nameLabel = "Name (shown on the button)", articleLabel = "Article before the name", numberLabel = "Telegram number",
     wrote = "Wrote: %s (%s)", useIt = "Use it", save = "Save this contact", saved = "Contact saved ✔",
     fixTitle = "3. Pin the app",
-    fixBody = "So the app always stays on the screen and cannot easily be left. It is optional. " +
-        "It is not a full lock (that needs a special mode), but it makes leaving by mistake harder.",
+    fixIntro = "To make the app easier for people who find phones hard to use, we suggest using this phone " +
+        "only for this app. That is why there are three levels for keeping the app pinned to the screen, " +
+        "from less to more secure. The first can be done now with the buttons; you can read the others below. All of it is optional.",
     btnHome = "Make the home button return to the app", btnPin = "Pin the app to the screen",
-    fixNote = "Three levels, from less to more secure:\n\n" +
-        "1. Pin the app (the buttons above). It can be left by holding Back and Recents (the gesture may differ by phone), " +
+    levelsShow = "See the three levels", levelsHide = "Hide the levels",
+    fixLevels = "1. Pin the app (the buttons above). It can be left by holding Back and Recents (the gesture may differ by phone), " +
         "and it must be pinned again after a restart. Good against accidental touches, not against someone who knows how.\n\n" +
         "2. Pin the app and set a screen lock with a PIN; in Android's settings, turn on asking for the PIN before unpinning " +
         "(the option's name varies). Careful: with a screen lock, waking the phone may ask for the PIN before showing the app. " +
@@ -152,11 +174,51 @@ private val En = Words(
     doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\".",
 )
 
+private val Fr = Words(
+    skip = "Passer le guide", back = "Retour", next = "Suivant", finish = "Terminer",
+    welcomeTitle = "Préparons l'appareil",
+    welcomeBody = "Cette application est conçue pour les personnes qui ont du mal à utiliser un téléphone portable, " +
+        "et leur permet de communiquer par la voix avec quelques personnes.\n\n" +
+        "Ce guide est facultatif : il permet de préparer l'application avec ce seul téléphone, sans ordinateur. " +
+        "Il y a trois choses à faire : connecter un bot Telegram, ajouter la personne avec qui l'on parlera " +
+        "et, si vous le souhaitez, épingler l'application à l'écran. Vous pouvez le passer maintenant et y revenir depuis « Programmation ».",
+    botTitle = "1. Le bot Telegram",
+    botSteps = "Chaque appareil a son propre bot, que vous créez avec le nom que vous voulez.\n\n" +
+        "Dans Telegram, cherchez @BotFather (celui qui a le badge bleu de vérification).\n" +
+        "Envoyez-lui /newbot, choisissez un nom et un identifiant se terminant par « bot ».\n" +
+        "Il vous donnera un jeton (une longue chaîne avec deux-points). Copiez-le et collez-le ci-dessous. Ne le montrez à personne.",
+    tokenLabel = "Jeton du bot",
+    alreadyBot = "Cet appareil a déjà un bot. Pour le garder, laissez la case vide et touchez « Suivant ».",
+    paste = "Coller", checking = "Vérification…",
+    tokenBad = "Cela ne fonctionne pas : vérifiez que c'est le jeton complet et qu'il y a internet.",
+    contactTitle = "2. Qui parlera",
+    contactSteps = "Cette personne doit ouvrir Telegram, chercher %s, toucher Start et écrire « bonjour ». " +
+        "Dès qu'elle l'aura fait, son nom et son numéro apparaîtront ici tout seuls. Vous pouvez aussi les saisir à la main.",
+    botRef = "le bot que vous avez créé",
+    nameLabel = "Nom (affiché sur le bouton)", articleLabel = "Article devant le nom", numberLabel = "Numéro Telegram",
+    wrote = "A écrit : %s (%s)", useIt = "Utiliser", save = "Enregistrer ce contact", saved = "Contact enregistré ✔",
+    fixTitle = "3. Épingler l'application",
+    fixIntro = "Pour faciliter l'usage de l'application aux personnes qui ont du mal avec les téléphones, nous proposons d'utiliser " +
+        "ce téléphone uniquement pour cette application. Il y a donc trois niveaux pour que l'application reste épinglée à l'écran, " +
+        "du moins sûr au plus sûr. Le premier peut se faire maintenant avec les boutons ; vous pouvez lire les autres plus bas. Tout est facultatif.",
+    btnHome = "Que le bouton d'accueil revienne à l'application", btnPin = "Épingler l'application à l'écran",
+    levelsShow = "Voir les trois niveaux", levelsHide = "Masquer les niveaux",
+    fixLevels = "1. Épingler l'application (les boutons ci-dessus). On peut en sortir en maintenant Retour et Récents (le geste peut varier selon le téléphone), " +
+        "et il faut la réépingler après un redémarrage. Utile contre les touches involontaires, pas contre quelqu'un qui sait faire.\n\n" +
+        "2. Épingler l'application et mettre un verrouillage d'écran avec code PIN ; dans les réglages d'Android, activer la demande du PIN avant de désépingler " +
+        "(le nom de l'option varie). Attention : avec un verrouillage d'écran, le réveil du téléphone peut demander le PIN avant d'afficher l'application. " +
+        "Non testé avec cette application.\n\n" +
+        "3. Mode kiosque (l'application comme administratrice du téléphone) : on ne peut pas en sortir sans l'adulte et il survit aux redémarrages. " +
+        "Il faut un téléphone réinitialisé, sans aucun compte, et le faire une fois depuis un ordinateur. Cette version de l'application ne l'inclut pas encore.\n\n" +
+        "Pour quitter un écran épinglé : « Programmation » → « Ne plus épingler ».",
+    doneTitle = "Tout est prêt", doneBody = "Vous pouvez fermer le guide. Tout peut être modifié plus tard depuis « Programmation ».",
+)
+
 private val Articles = listOf("–" to "", "la" to "la", "el" to "el", "l'" to "l'", "en" to "en")
 
-private fun wordsFor(lang: String) = when (lang) { "es" -> Es; "en" -> En; else -> Ca }
+private fun wordsFor(lang: String) = when (lang) { "es" -> Es; "en" -> En; "fr" -> Fr; else -> Ca }
 
-private fun systemLang(): String = when (Locale.getDefault().language) { "es" -> "es"; "en" -> "en"; else -> "ca" }
+private fun systemLang(): String = when (Locale.getDefault().language) { "es" -> "es"; "en" -> "en"; "fr" -> "fr"; else -> "ca" }
 
 /**
  * The first-time guide, optional and skippable at any step. It does what the
@@ -186,6 +248,7 @@ fun TutorialScreen(
     var article by remember { mutableStateOf("") }
     var number by remember { mutableStateOf("") }
     var saved by remember { mutableStateOf(false) }
+    var showLevels by remember { mutableStateOf(false) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
 
     // The name of the bot in use, to tell the person which one to write to.
@@ -213,7 +276,7 @@ fun TutorialScreen(
     ) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("ca" to "Català", "es" to "Español", "en" to "English").forEach { (code, label) ->
+                listOf("ca" to "Català", "es" to "Español", "en" to "English", "fr" to "Français").forEach { (code, label) ->
                     FilterChip(selected = lang == code, onClick = { lang = code; prefs.lang = code }, label = { Text(label) })
                 }
             }
@@ -249,7 +312,7 @@ fun TutorialScreen(
                 }
                 2 -> {
                     Text(w.contactTitle, fontSize = 30.sp, color = Color.Black)
-                    Text(w.contactSteps.format(botName ?: "…"), fontSize = 19.sp, color = Color.DarkGray)
+                    Text(w.contactSteps.format(botName?.let { "@$it" } ?: w.botRef), fontSize = 19.sp, color = Color.DarkGray)
                     stranger?.let { s ->
                         Column(
                             Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFFFFF3CD)).padding(14.dp),
@@ -290,10 +353,11 @@ fun TutorialScreen(
                 }
                 3 -> {
                     Text(w.fixTitle, fontSize = 30.sp, color = Color.Black)
-                    Text(w.fixBody, fontSize = 19.sp, color = Color.DarkGray)
+                    Text(w.fixIntro, fontSize = 19.sp, color = Color.DarkGray)
                     OutlinedButton(onClick = onHome) { Text(w.btnHome) }
                     OutlinedButton(onClick = onPin) { Text(w.btnPin) }
-                    Text(w.fixNote, fontSize = 17.sp, color = Color.DarkGray)
+                    TextButton(onClick = { showLevels = !showLevels }) { Text(if (showLevels) w.levelsHide else w.levelsShow) }
+                    if (showLevels) Text(w.fixLevels, fontSize = 17.sp, color = Color.DarkGray)
                 }
                 else -> {
                     Text(w.doneTitle, fontSize = 30.sp, color = Color.Black)

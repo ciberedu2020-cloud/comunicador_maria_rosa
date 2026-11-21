@@ -27,7 +27,12 @@ class Prefs(context: Context) {
         get() = p.getBoolean("tutorialDone", false)
         set(v) = p.edit().putBoolean("tutorialDone", v).apply()
 
-    /** "ca", "es" or "en" for the guide; empty = follow the phone's language. */
+    /** The battery question is asked once, when the app is first installed. */
+    var batteryAsked: Boolean
+        get() = p.getBoolean("batteryAsked", false)
+        set(v) = p.edit().putBoolean("batteryAsked", v).apply()
+
+    /** "ca", "es", "en" or "fr" for the guide; empty = follow the phone's language. */
     var lang: String
         get() = p.getString("lang", "") ?: ""
         set(v) = p.edit().putString("lang", v).apply()

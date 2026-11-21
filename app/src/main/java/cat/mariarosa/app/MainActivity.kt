@@ -133,6 +133,7 @@ class MainActivity : ComponentActivity() {
                     onUnpin = ::unpinScreen,
                     onHome = chooseHome,
                     onTutorial = { screen = Screen.Tutorial },
+                    onBattery = { askBatteryExemption(force = true) },
                 ) {
                     applyConfig()
                     screen = Screen.Home
@@ -173,10 +174,13 @@ class MainActivity : ComponentActivity() {
         screen = Screen.Settings
     }
 
-    /** Asks Android not to put the app to sleep to save battery. Asked until it is granted. */
-    private fun askBatteryExemption() {
+    /** Asks Android not to put the app to sleep to save battery. Once, at install; again only on request. */
+    private fun askBatteryExemption(force: Boolean = false) {
+        val prefs = Prefs(this)
+        if (!force && prefs.batteryAsked) return
         val pm = getSystemService(POWER_SERVICE) as PowerManager
-        if (pm.isIgnoringBatteryOptimizations(packageName)) return
+        if (pm.isIgnoringBatteryOptimizations(packageName)) { prefs.batteryAsked = true; return }
+        prefs.batteryAsked = true
         try {
             startActivity(
                 Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")),
