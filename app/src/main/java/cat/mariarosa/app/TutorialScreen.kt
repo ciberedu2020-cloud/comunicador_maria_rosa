@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -38,7 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 /** The words of the first-time guide in one language. %s marks where a name or number goes. */
 internal class Words(
@@ -246,9 +246,8 @@ private val Fr = Words(
 
 private val Articles = listOf("–" to "", "la" to "la", "el" to "el", "l'" to "l'", "en" to "en")
 
-private fun wordsFor(lang: String) = when (lang) { "es" -> Es; "en" -> En; "fr" -> Fr; else -> Ca }
+internal fun wordsFor(lang: String) = when (lang) { "es" -> Es; "en" -> En; "fr" -> Fr; else -> Ca }
 
-private fun systemLang(): String = when (Locale.getDefault().language) { "es" -> "es"; "en" -> "en"; "fr" -> "fr"; else -> "ca" }
 
 /**
  * The first-time guide, optional and skippable at any step. It does what the
@@ -265,8 +264,7 @@ fun TutorialScreen(
     onClose: () -> Unit,
 ) {
     val prefs = remember { Prefs(context) }
-    var lang by remember { mutableStateOf(prefs.lang.ifEmpty { systemLang() }) }
-    val w = wordsFor(lang)
+    val w = wordsFor(Lang.current)
     var step by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
 
@@ -308,14 +306,13 @@ fun TutorialScreen(
         modifier = Modifier.fillMaxSize().background(Color.White).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("ca" to "Català", "es" to "Español", "en" to "English", "fr" to "Français").forEach { (code, label) ->
-                    FilterChip(selected = lang == code, onClick = { lang = code; prefs.lang = code }, label = { Text(label) })
-                }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Lang.all.forEach { (code, label) ->
+                FilterChip(selected = Lang.current == code, onClick = { Lang.set(context, code) }, label = { Text(label) })
             }
-            TextButton(onClick = { close() }) { Text(w.skip) }
         }
+        if (S.autoTranslation.isNotEmpty()) Text(S.autoTranslation, fontSize = 14.sp, color = Color.DarkGray)
+        TextButton(onClick = { close() }, modifier = Modifier.align(Alignment.End)) { Text(w.skip) }
 
         Column(
             modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
@@ -370,10 +367,12 @@ fun TutorialScreen(
                         value = name, onValueChange = { name = it; saved = false },
                         label = { Text(w.nameLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
                     )
-                    Text(w.articleLabel, fontSize = 16.sp, color = Color.DarkGray)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Articles.forEach { (label, value) ->
-                            FilterChip(selected = article == value, onClick = { article = value }, label = { Text(label) })
+                    if (Lang.current == "ca") {
+                        Text(w.articleLabel, fontSize = 16.sp, color = Color.DarkGray)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Articles.forEach { (label, value) ->
+                                FilterChip(selected = article == value, onClick = { article = value }, label = { Text(label) })
+                            }
                         }
                     }
                     OutlinedTextField(

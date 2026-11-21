@@ -139,36 +139,43 @@ fun SettingsScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            Text("Programació", fontSize = 34.sp, color = Color.Black)
-            Body("Aquí es canvia la configuració de l'app. Només ho ha de fer un adult.")
-            Big("Obre la guia pas a pas", primary = true, onClick = onTutorial)
+            Text(S.settingsTitle, fontSize = 34.sp, color = Color.Black)
+            Body(S.settingsIntro)
+            Big(S.openGuide, primary = true, onClick = onTutorial)
+            Heading(S.languageTitle)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Lang.all.forEach { (code, label) ->
+                    FilterChip(selected = Lang.current == code, onClick = { Lang.set(context, code) }, label = { Text(label, fontSize = 16.sp) })
+                }
+            }
+            if (S.autoTranslation.isNotEmpty()) Body(S.autoTranslation)
 
             // ---- How things stand ----
-            Heading("Com està ara")
+            Heading(S.nowTitle)
             Card {
                 Body(
-                    if (wifi) "Wi-Fi: connectat ✔" else "Wi-Fi: no connectat. Sense Wi-Fi no es poden rebre ni enviar missatges.",
+                    if (wifi) S.wifiOk else S.wifiNo,
                     color = if (wifi) Color(0xFF2E7D32) else Color(0xFFC62828),
                 )
-                if (!wifi) Big("Connecta al Wi-Fi", onClick = onWifi) else Big("Canvia de Wi-Fi", onClick = onWifi)
+                if (!wifi) Big(S.connectWifi, onClick = onWifi) else Big(S.changeWifi, onClick = onWifi)
                 Body(
                     when {
-                        botName != null -> "Bot de Telegram: @$botName ✔"
-                        botChecked -> "Bot de Telegram: pendent de configurar. Obre la guia pas a pas."
-                        else -> "Bot de Telegram: comprovant…"
+                        botName != null -> S.botOk(botName!!)
+                        botChecked -> S.botPending
+                        else -> S.botChecking
                     },
                     color = if (botName != null) Color(0xFF2E7D32) else Grey,
                 )
             }
 
             // ---- The people ----
-            Heading("Contactes")
-            Body("Una persona surt aquí quan escriu «hola» al bot. Només cal afegir-la.")
+            Heading(S.contactsTitle)
+            Body(S.contactsHint)
             stranger?.let { s ->
                 if (drafts.none { it.telegramId.trim() == s.chatId.toString() }) {
                     Card(background = Color(0xFFFFF3CD)) {
-                        Body("Ha escrit al bot: ${s.name} (${s.chatId})", color = Color.Black)
-                        Big("Afegeix-la com a contacte", primary = true) {
+                        Body(S.wroteBot(s.name, s.chatId), color = Color.Black)
+                        Big(S.addHer, primary = true) {
                             drafts.add(Draft("c${System.currentTimeMillis()}", s.name, "", s.chatId.toString(), true))
                             prefs.stranger = null
                             stranger = null
@@ -180,74 +187,75 @@ fun SettingsScreen(
                 Card {
                     OutlinedTextField(
                         value = d.name, onValueChange = { d.name = it },
-                        label = { Text("Nom (surt al botó)") }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                        label = { Text(S.nameLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
                     )
-                    Body("Article davant del nom")
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Articles.forEach { (label, value) ->
-                            FilterChip(selected = d.article == value, onClick = { d.article = value }, label = { Text(label, fontSize = 18.sp) })
+                    // The article is Catalan grammar ("la Maria"); other languages do not use it.
+                    if (Lang.current == "ca") {
+                        Body(S.articleLabel)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Articles.forEach { (label, value) ->
+                                FilterChip(selected = d.article == value, onClick = { d.article = value }, label = { Text(if (value.isEmpty()) S.none else label, fontSize = 18.sp) })
+                            }
                         }
                     }
-                    Body("Es llegirà: «Respon a ${d.toContact().full}»")
+                    Body(S.willShow(d.toContact()))
                     OutlinedTextField(
                         value = d.telegramId, onValueChange = { d.telegramId = it.filter(Char::isDigit) },
-                        label = { Text("Número de Telegram") }, singleLine = true,
+                        label = { Text(S.telegramNumber) }, singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(),
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                         Switch(checked = d.active, onCheckedChange = { d.active = it })
-                        Body(if (d.active) "Surt a la pantalla" else "Amagat", color = Color.Black)
+                        Body(if (d.active) S.visible else S.hidden, color = Color.Black)
                     }
-                    Big("Treu aquest contacte") { drafts.removeAt(i) }
+                    Big(S.removeContact) { drafts.removeAt(i) }
                 }
             }
             if (drafts.size < MAX_CONTACTS) {
-                Big("Afegeix un contacte a mà") {
+                Big(S.addManual) {
                     drafts.add(Draft("c${System.currentTimeMillis()}", "", "", "", true))
                 }
             }
 
             // ---- Sound ----
-            Heading("So")
+            Heading(S.soundTitle)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Switch(checked = sound, onCheckedChange = { sound = it; prefs.soundOn = it })
-                Body(if (sound) "Sona un avís quan arriba un missatge" else "Sense avís sonor", color = Color.Black)
+                Body(if (sound) S.soundOn else S.soundOff, color = Color.Black)
             }
 
             // ---- Protections ----
-            Heading("Protegir aquesta pantalla")
-            Body(
-                "Si poses un PIN de 4 xifres, qui vulgui entrar a Programació l'haurà d'escriure. " +
-                    "Serveix perquè ningú més (per exemple, els nets) hi canviï res. No és el codi per desbloquejar el mòbil.",
-            )
+            Heading(S.protectTitle)
+            Body(S.protectBody)
             OutlinedTextField(
                 value = pin, onValueChange = { pin = it.filter(Char::isDigit).take(4) },
-                label = { Text("PIN (4 xifres; buit = sense PIN)") }, singleLine = true,
+                label = { Text(S.pinField) }, singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 modifier = Modifier.fillMaxWidth(),
             )
-            if (pinBad) Body("El PIN ha de tenir 4 xifres.", color = Color(0xFFC62828))
-            Body("Apunta'l en un lloc segur: si s'oblida, només es pot treure reinstal·lant l'app i es perd la configuració.")
+            if (pinBad) Body(S.pinMust4, color = Color(0xFFC62828))
+            Body(S.pinNote)
 
-            Heading("Fixar l'app")
-            Body(Ca.fixIntro)
-            Big("Fixa l'app a la pantalla", onClick = onPin)
-            Big("Deixa de fixar", onClick = onUnpin)
-            Big("Que el botó d'inici torni a l'app", onClick = onHome)
-            Big(if (showLevels) Ca.levelsHide else Ca.levelsShow) { showLevels = !showLevels }
-            if (showLevels) Body(Ca.fixLevels)
+            Heading(S.pinAppTitle)
+            val w = wordsFor(Lang.current)
+            Body(w.fixIntro)
+            Big(w.btnPin, onClick = onPin)
+            Big(S.unpin, onClick = onUnpin)
+            Big(w.btnHome, onClick = onHome)
+            Big(if (showLevels) w.levelsHide else w.levelsShow) { showLevels = !showLevels }
+            if (showLevels) Body(w.fixLevels)
 
-            Heading("Bateria")
-            Body("L'app ha de poder funcionar amb la pantalla apagada. Si Android l'aturés, torna a demanar aquest permís.")
-            Big("Torna a demanar l'exempció de bateria", onClick = onBattery)
+            Heading(S.batteryTitle)
+            Body(S.batteryBody)
+            Big(S.batteryBtn, onClick = onBattery)
 
-            Big("Desa i torna", primary = true, enabled = !pinBad) {
+            Big(S.saveBack, primary = true, enabled = !pinBad) {
                 prefs.saveContacts(drafts.map { it.toContact() }.filter { it.name.isNotEmpty() })
                 prefs.pin = pin
                 onDone()
             }
-            Big("Torna sense desar", onClick = onDone)
+            Big(S.backNoSave, onClick = onDone)
         }
     }
 }

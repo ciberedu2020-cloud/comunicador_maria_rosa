@@ -36,7 +36,10 @@ s'escolta amb un toc.
   llavors no torna a sortir sola; es reobre des de Programació. Passos: (1) Wi-Fi, amb l'estat i un botó per connectar-s'hi;
   (2) el bot: cada aparell té el seu, que crea qui el prepara amb @BotFather i en pega el token, que es comprova abans
   de desar-lo; (3) qui hi parlarà (nom, article i número, que surt sol quan la persona escriu al bot); (4) PIN opcional;
-  (5) fixar l'app. La pregunta de la bateria només es fa un cop, en instal·lar. Només la guia és multillenguatge (ca/es/en/fr).
+  (5) fixar l'app. La pregunta de la bateria només es fa un cop, en instal·lar. **Idioma:** tota l'app (la pantalla de la persona, Programació, la guia i els missatges que el bot envia) està en català,
+  castellà, anglès i francès. Segueix l'idioma del mòbil, o el que es triï a la guia o a Programació. Totes les frases són a
+  `Strings.kt`, les quatre llengües una al costat de l'altra. **El castellà, l'anglès i el francès són traduccions automàtiques
+  i no les ha revisat cap persona**; l'app ho diu a pantalla quan se'n tria una. Els articles («la Maria») només existeixen en català.
 - **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
   i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
   No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.

@@ -51,6 +51,7 @@ data class UiState(
 class Messenger private constructor(context: Context, @Volatile private var config: AppConfig) {
     private val app = context.applicationContext
     private val prefs = Prefs(app)
+    init { Lang.init(app) }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     @Volatile private var token = prefs.effectiveToken()
     @Volatile private var client = TelegramClient(token)
@@ -220,7 +221,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         heardNew = false
         val chatId = config.contacts.firstOrNull { it.id == contactId }?.telegramId ?: return
         scope.launch(Dispatchers.IO) {
-            try { client.sendMessage(chatId, "✔ Ho ha escoltat") } catch (_: Exception) {}
+            try { client.sendMessage(chatId, S.heard) } catch (_: Exception) {}
         }
     }
 
@@ -445,7 +446,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
             val from = msg.optJSONObject("from")?.optString("first_name", "").orEmpty()
             prefs.stranger = Prefs.Stranger(chatId, from.ifBlank { "Contacte" })
             runCatching {
-                client.sendMessage(chatId, "Aquest aparell encara no et coneix. El teu identificador és $chatId.")
+                client.sendMessage(chatId, S.unknown(chatId))
             }
             return
         }
@@ -453,10 +454,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         if (voice == null) {
             if (!config.features.text) {
                 runCatching {
-                    client.sendMessage(
-                        chatId,
-                        "De moment aquest aparell només rep notes de veu. Mantén premut el micròfon per enviar-ne una.",
-                    )
+                    client.sendMessage(chatId, S.voiceOnly)
                 }
             }
             return

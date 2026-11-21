@@ -20,6 +20,7 @@ class MessengerService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Lang.init(this)
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(
             NotificationChannel(CHANNEL, "Connexió", NotificationManager.IMPORTANCE_LOW),
@@ -27,7 +28,7 @@ class MessengerService : Service() {
         val notification = Notification.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Comunicador Maria Rosa")
-            .setContentText("Esperant missatges")
+            .setContentText(S.waiting)
             .setOngoing(true)
             .build()
         if (Build.VERSION.SDK_INT >= 34) {

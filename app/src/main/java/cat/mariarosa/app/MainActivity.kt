@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
             setStreamVolume(AudioManager.STREAM_MUSIC, getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
             setStreamVolume(AudioManager.STREAM_ALARM, getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
         }
+        Lang.init(this)
         config = AppConfig.load(this)
         val prefs = Prefs(this)
         // The very first time after installing: the guide, which can be skipped
@@ -248,7 +249,7 @@ private fun Home(
         if (state.countdown != null || state.doorOpen) {
             // Only while a reply waits to be sent (and 3 s after it is thrown away): a small door for the adult, out of the way.
             Text(
-                "⚙ Programació",
+                S.programmingDoor,
                 color = Color.LightGray,
                 fontFamily = Atkinson,
                 fontSize = 18.sp,
@@ -258,17 +259,17 @@ private fun Home(
         }
         if (contacts.isEmpty()) {
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text("Sense contactes", color = Color.White, fontFamily = Atkinson, fontSize = 32.sp)
+                Text(S.noContacts, color = Color.White, fontFamily = Atkinson, fontSize = 32.sp)
             }
         }
         contacts.forEach { contact ->
             val waiting = state.pending[contact.id] ?: 0
             val playing = state.playingContact == contact.id
             val (colour, title, subtitle) = when {
-                playing -> Triple(Blue, "Escoltant…", "Toca per parar")
-                waiting > 0 -> Triple(Green, "Missatge nou ${contact.ofFull}", "Toca aquí per escoltar")
-                contacts.size == 1 -> Triple(Yellow, "Hola!", "Cap missatge nou")
-                else -> Triple(Yellow, contact.fullCapital, "Cap missatge nou")
+                playing -> Triple(Blue, S.listening, S.tapToStop)
+                waiting > 0 -> Triple(Green, S.newMessageFrom(contact), S.tapToListen)
+                contacts.size == 1 -> Triple(Yellow, S.hello, S.noNewMessage)
+                else -> Triple(Yellow, if (Lang.current == "ca") contact.fullCapital else contact.name, S.noNewMessage)
             }
             Box(
                 modifier = Modifier
@@ -299,14 +300,14 @@ private fun Home(
                 val (rColour, rTitle, rSubtitle) = when {
                     recording -> Triple(
                         Red,
-                        "Gravant… ${state.recordSeconds / 60}:${"%02d".format(state.recordSeconds % 60)}",
-                        "Toca per enviar",
+                        S.recording("${state.recordSeconds / 60}:${"%02d".format(state.recordSeconds % 60)}"),
+                        S.tapToSend,
                     )
-                    notice == Notice.Sending -> Triple(Blue, "Enviant…", "")
-                    notice == Notice.Sent -> Triple(Green, "Enviat ✔", "${contact.fullCapital} ho rebrà")
-                    notice == Notice.Failed -> Triple(Orange, "No s'ha pogut enviar", "Torna-ho a provar")
-                    notice == Notice.Discarded -> Triple(Light, "Esborrat", "No s'ha enviat")
-                    else -> Triple(Light, "Respon a ${contact.full}", "Toca i parla")
+                    notice == Notice.Sending -> Triple(Blue, S.sending, "")
+                    notice == Notice.Sent -> Triple(Green, S.sent, S.willReceive(contact))
+                    notice == Notice.Failed -> Triple(Orange, S.sendFailed, S.tryAgain)
+                    notice == Notice.Discarded -> Triple(Light, S.discarded, S.notSent)
+                    else -> Triple(Light, S.replyTo(contact), S.tapAndSpeak)
                 }
                 val countdown = if (mine) state.countdown else null
                 if (countdown != null) {
@@ -326,7 +327,7 @@ private fun Home(
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
                                 Text(
-                                    "S'enviarà en $countdown",
+                                    S.sendingIn(countdown),
                                     color = Color.Black,
                                     fontFamily = Atkinson,
                                     fontWeight = FontWeight.Bold,
@@ -334,7 +335,7 @@ private fun Home(
                                     textAlign = TextAlign.Center,
                                 )
                                 Text(
-                                    "Toca aquí per enviar ara · X per esborrar",
+                                    S.sendNowHint,
                                     color = Color.Black,
                                     fontFamily = Atkinson,
                                     fontSize = 24.sp,
@@ -382,7 +383,7 @@ private fun Home(
         }
         if (!state.online) {
             Text(
-                "Sense connexió a internet",
+                S.noInternet,
                 color = Color.White,
                 fontFamily = Atkinson,
                 fontSize = 24.sp,
@@ -400,7 +401,7 @@ private fun PinDialog(pin: String, onClose: () -> Unit, onOk: () -> Unit) {
     var wrong by androidx.compose.runtime.remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = onClose,
-        title = { Text("PIN") },
+        title = { Text(S.pin) },
         text = {
             Column {
                 OutlinedTextField(
@@ -411,11 +412,11 @@ private fun PinDialog(pin: String, onClose: () -> Unit, onOk: () -> Unit) {
                 )
                 if (wrong) {
                     Spacer(Modifier.height(8.dp))
-                    Text("PIN incorrecte", color = Color.Red)
+                    Text(S.pinWrong, color = Color.Red)
                 }
             }
         },
-        confirmButton = { TextButton(onClick = { if (typed == pin) onOk() else wrong = true }) { Text("Entra") } },
-        dismissButton = { TextButton(onClick = onClose) { Text("Cancel·la") } },
+        confirmButton = { TextButton(onClick = { if (typed == pin) onOk() else wrong = true }) { Text(S.enter) } },
+        dismissButton = { TextButton(onClick = onClose) { Text(S.cancel) } },
     )
 }
