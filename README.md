@@ -24,7 +24,7 @@ s'escolta amb un toc.
   (ignora el primer segon i mig, perquè un doble toc no l'envii sense voler); una **X vermella** esborra la nota;
   si no es toca res, s'envia sola.
 - **Només veu**, als dos sentits. Si algú escriu text, el bot respon que de moment només rep notes de veu.
-- **Programació, sense ordinador:** durant el compte enrere surt a dalt, petit, «⚙ Programació». Hi ha el nom i
+- **Programació, sense ordinador:** durant el compte enrere, i 3 segons després d'esborrar la nota amb la X, surt a dalt, petit, «⚙ Programació». Hi ha el nom i
   l'article de cada contacte, el número de Telegram, so d'avís sí/no, PIN opcional i un accés als ajustos de Wi-Fi.
   Entrar-hi **esborra la nota que esperava** (qui programa no parla). La primera vegada, si no hi ha cap contacte amb número,
   l'app s'obre directament aquí. Si algú desconegut escriu al bot, apareix a la pantalla amb un botó per afegir-lo.

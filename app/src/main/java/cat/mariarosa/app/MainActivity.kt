@@ -124,7 +124,7 @@ class MainActivity : ComponentActivity() {
 
     /** A recording waiting to be sent is thrown away: the adult is here to program, not to talk. */
     private fun openSettings(messenger: Messenger) {
-        messenger.onCancelSend()
+        messenger.onCancelSend(keepDoor = false)
         inSettings = true
     }
 
@@ -167,8 +167,8 @@ private fun Home(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        if (state.countdown != null) {
-            // Only while a reply waits to be sent: a small door for the adult, out of the way.
+        if (state.countdown != null || state.doorOpen) {
+            // Only while a reply waits to be sent (and 3 s after it is thrown away): a small door for the adult, out of the way.
             Text(
                 "⚙ Programació",
                 color = Color.LightGray,

@@ -33,6 +33,8 @@ data class UiState(
     val notice: Notice? = null,
     /** Seconds left to cancel a recorded reply; null when nothing is waiting to be sent. */
     val countdown: Int? = null,
+    /** The programming door stays open a few seconds after a recording is thrown away. */
+    val doorOpen: Boolean = false,
 )
 
 /**
@@ -70,6 +72,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
     private var pendingFile: File? = null
     private var pendingSend: Triple<Long, File, Int>? = null
     private var countdownStartedAt = 0L
+    private var doorJob: Job? = null
 
     // The chime is our own sound, not the phone's notification sound: on some
     // phones (this Xiaomi) that setting is empty and the "chime" is silent.
@@ -346,7 +349,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
     }
 
     /** The X: throws the recording away instead of sending it. */
-    fun onCancelSend() {
+    fun onCancelSend(keepDoor: Boolean = true) {
         if (_state.value.countdown == null) return
         countdownJob?.cancel()
         countdownJob = null
@@ -355,6 +358,15 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         pendingSend = null
         _state.value = _state.value.copy(countdown = null)
         showNotice(Notice.Discarded)
+        if (keepDoor) {
+            // The adult who threw the note away still has 3 seconds to reach the programming door.
+            doorJob?.cancel()
+            _state.value = _state.value.copy(doorOpen = true)
+            doorJob = scope.launch {
+                delay(3_000)
+                _state.value = _state.value.copy(doorOpen = false)
+            }
+        }
     }
 
     private fun upload(chatId: Long, file: File, secs: Int) {
