@@ -6,8 +6,8 @@ plugins {
 }
 
 // The bot token lives in telegram.properties (never committed). It is baked
-// into the debug/release build: acceptable for a family app on one device,
-// but it means the APK itself must not be shared.
+// into the DEBUG build only, for development: that APK must not be shared.
+// The release build carries no token: each phone gets its own bot from the guide.
 val telegramProps = Properties().apply {
     val file = rootProject.file("telegram.properties")
     if (file.exists()) file.inputStream().use { load(it) }
@@ -24,13 +24,34 @@ android {
         minSdk = 29
         targetSdk = 37
         versionCode = 1
-        versionName = "0.1"
-        buildConfigField("String", "TELEGRAM_TOKEN", "\"${telegramProps.getProperty("token", "")}\"")
+        versionName = "1.0"
+    }
+
+    // The signing key and its password live in keystore.properties (never
+    // committed). Without that file the release bundle is built unsigned.
+    val keystoreProps = Properties().apply {
+        val file = rootProject.file("keystore.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+    signingConfigs {
+        if (keystoreProps.isNotEmpty()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "TELEGRAM_TOKEN", "\"${telegramProps.getProperty("token", "")}\"")
+        }
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "TELEGRAM_TOKEN", "\"\"")
+            if (keystoreProps.isNotEmpty()) signingConfig = signingConfigs.getByName("release")
         }
     }
 

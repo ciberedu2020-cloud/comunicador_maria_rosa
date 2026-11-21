@@ -16,5 +16,5 @@ local.properties
 *.jks
 *.keystore
 keystore.properties
-/app/src/main/assets/config.local.json
+/app/src/debug/assets/config.local.json
 /diari-privat.md

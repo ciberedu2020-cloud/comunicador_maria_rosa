@@ -348,13 +348,14 @@ class Messenger private constructor(context: Context, @Volatile private var conf
     }
 
     /**
-     * Tapping the count itself: send now, no more waiting. Ignored for the
-     * first moment, so the double tap that ended the recording cannot also send it.
+     * Tapping the count itself: send now, no more waiting. Ignored only for
+     * the first fraction of a second, so a double tap that ended the recording cannot also send it;
+     * a deliberate tap right after must work the first time.
      */
     fun onSendNow() {
         val send = pendingSend ?: return
         if (_state.value.countdown == null) return
-        if (SystemClock.elapsedRealtime() - countdownStartedAt < 1_500) return
+        if (SystemClock.elapsedRealtime() - countdownStartedAt < 400) return
         countdownJob?.cancel()
         countdownJob = null
         pendingFile = null

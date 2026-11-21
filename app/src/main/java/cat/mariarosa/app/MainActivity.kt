@@ -252,7 +252,9 @@ private fun Home(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(gap),
     ) {
-        if (state.countdown != null || state.doorOpen) {
+        // With nobody to talk to there would be no recording and so no door: show it, or the app could never be set up.
+        val nobodyYet = contacts.none { it.telegramId != null }
+        if (state.countdown != null || state.doorOpen || nobodyYet) {
             // Only while a reply waits to be sent (and 3 s after it is thrown away): a small door for the adult, out of the way.
             Text(
                 S.programmingDoor,
