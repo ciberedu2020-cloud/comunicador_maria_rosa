@@ -10,6 +10,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.media.AudioManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -149,6 +150,29 @@ class MainActivity : ComponentActivity() {
                 askPin = false
                 openSettings(messenger)
             }
+        }
+    }
+
+    private var leftAt = 0L
+
+    override fun onStop() {
+        super.onStop()
+        leftAt = SystemClock.elapsedRealtime()
+        askPin = false
+    }
+
+    /**
+     * Leaving the app (recents, screen off) must not leave the programming
+     * screen open for whoever comes next. With a PIN set, it closes at once;
+     * the guide gets ten minutes, because filling it in means going to Telegram and back.
+     */
+    override fun onStart() {
+        super.onStart()
+        if (leftAt == 0L || Prefs(this).pin.isEmpty()) return
+        when (screen) {
+            Screen.Settings -> screen = Screen.Home
+            Screen.Tutorial -> if (SystemClock.elapsedRealtime() - leftAt > 10 * 60_000L) screen = Screen.Home
+            Screen.Home -> Unit
         }
     }
 
