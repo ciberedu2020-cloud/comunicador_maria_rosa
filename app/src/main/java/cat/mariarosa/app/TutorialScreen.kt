@@ -62,13 +62,14 @@ internal val Ca = Words(
     welcomeBody = "Aquesta aplicació està pensada per a persones que tenen dificultats per fer servir un mòbil, " +
         "i permet comunicar-se per veu amb uns pocs usuaris.\n\n" +
         "Aquesta guia és opcional: serveix per deixar l'app a punt amb només aquest mòbil, sense ordinador. " +
-        "Els passos són: el Wi-Fi, el bot de Telegram, qui hi parlarà, un PIN opcional i, si vols, fixar l'app a la pantalla. " +
+        "Els passos són: la connexió a internet, el bot de Telegram, qui hi parlarà, un PIN opcional i, si vols, fixar l'app a la pantalla. " +
         "Pots saltar-la ara i tornar-hi des de «Programació».",
-    wifiTitle = "1. Wi-Fi",
+    wifiTitle = "1. Internet",
     wifiBody = "Per començar, necessites l'ajuda d'algú per deixar-ho tot a punt. Un cop fetes aquestes pautes, després ja anirà tot sol.\n\n" +
-        "Aquest mòbil només funcionarà a casa, amb el Wi-Fi de la casa: no té número de telèfon ni dades mòbils, " +
-        "i fora de casa no rebrà ni enviarà missatges. Comprova que estigui connectat al Wi-Fi, o connecta'l ara.",
-    wifiOn = "Connectat al Wi-Fi ✔", wifiOff = "Encara no està connectat a cap Wi-Fi", wifiBtn = "Obre els ajustos de Wi-Fi",
+        "Aquest mòbil necessita internet per rebre i enviar missatges. La manera més senzilla i gratuïta és el Wi-Fi de casa. " +
+        "Si a casa no hi ha Wi-Fi, també funciona amb una targeta SIM amb dades mòbils (només cal la targeta; no cal fer-la servir per trucar). " +
+        "Sense cap de les dues, no rebrà ni enviarà res. Comprova que estigui connectat, o connecta'l ara.",
+    wifiOn = "Connectat a internet ✔", wifiOff = "Encara no està connectat a internet", wifiBtn = "Obre els ajustos de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necessites tenir instal·lada l'aplicació Telegram en algun mòbil per poder preparar això. " +
         "Cada aparell té el seu propi bot, que crees tu.\n\n" +
@@ -115,13 +116,14 @@ private val Es = Words(
     welcomeBody = "Esta aplicación está pensada para personas con dificultades para usar un móvil, " +
         "y permite comunicarse por voz con unos pocos usuarios.\n\n" +
         "Esta guía es opcional: sirve para dejar la app lista solo con este móvil, sin ordenador. " +
-        "Los pasos son: el Wi-Fi, el bot de Telegram, quién hablará, un PIN opcional y, si quieres, fijar la app en la pantalla. " +
+        "Los pasos son: la conexión a internet, el bot de Telegram, quién hablará, un PIN opcional y, si quieres, fijar la app en la pantalla. " +
         "Puedes saltarla ahora y volver desde «Programación».",
-    wifiTitle = "1. Wi-Fi",
+    wifiTitle = "1. Internet",
     wifiBody = "Para empezar, necesitas la ayuda de alguien para dejarlo todo listo. Una vez hechas estas pautas, después todo irá solo.\n\n" +
-        "Este móvil solo funcionará en casa, con el Wi-Fi de la casa: no tiene número de teléfono ni datos móviles, " +
-        "y fuera de casa no recibirá ni enviará mensajes. Comprueba que esté conectado al Wi-Fi, o conéctalo ahora.",
-    wifiOn = "Conectado al Wi-Fi ✔", wifiOff = "Aún no está conectado a ningún Wi-Fi", wifiBtn = "Abrir los ajustes de Wi-Fi",
+        "Este móvil necesita internet para recibir y enviar mensajes. La forma más sencilla y gratuita es el Wi-Fi de casa. " +
+        "Si en casa no hay Wi-Fi, también funciona con una tarjeta SIM con datos móviles (solo hace falta la tarjeta; no hace falta usarla para llamar). " +
+        "Sin ninguna de las dos, no recibirá ni enviará nada. Comprueba que esté conectado, o conéctalo ahora.",
+    wifiOn = "Conectado a internet ✔", wifiOff = "Aún no está conectado a internet", wifiBtn = "Abrir los ajustes de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necesitas tener instalada la aplicación Telegram en algún móvil para poder preparar esto. " +
         "Cada aparato tiene su propio bot, que creas tú.\n\n" +
@@ -168,13 +170,14 @@ private val En = Words(
     welcomeBody = "This app is meant for people who have difficulty using a phone, " +
         "and lets them communicate by voice with a few people.\n\n" +
         "This guide is optional: it gets the app ready using only this phone, no computer. " +
-        "The steps are: Wi-Fi, the Telegram bot, who will be talking, an optional PIN and, if you wish, pinning the app to the screen. " +
+        "The steps are: the internet connection, the Telegram bot, who will be talking, an optional PIN and, if you wish, pinning the app to the screen. " +
         "You can skip it now and come back from \"Programming\".",
-    wifiTitle = "1. Wi-Fi",
+    wifiTitle = "1. Internet",
     wifiBody = "To begin with, you need someone's help to get everything ready. Once these steps are done, everything will run by itself.\n\n" +
-        "This phone will only work at home, on the home Wi-Fi: it has no phone number or mobile data, " +
-        "and away from home it will neither receive nor send messages. Check that it is connected to the Wi-Fi, or connect it now.",
-    wifiOn = "Connected to Wi-Fi ✔", wifiOff = "Not connected to any Wi-Fi yet", wifiBtn = "Open Wi-Fi settings",
+        "This phone needs internet to receive and send messages. The simplest, free way is the home Wi-Fi. " +
+        "If there is no Wi-Fi at home, it also works with a SIM card with mobile data (only the card is needed; it does not have to be used for calls). " +
+        "With neither, it will not receive or send anything. Check that it is connected, or connect it now.",
+    wifiOn = "Connected to the internet ✔", wifiOff = "Not connected to the internet yet", wifiBtn = "Open Wi-Fi settings",
     botTitle = "2. The Telegram bot",
     botSteps = "You need the Telegram app installed on some phone to be able to set this up. " +
         "Each phone has its own bot, which you create.\n\n" +
@@ -221,13 +224,14 @@ private val Fr = Words(
     welcomeBody = "Cette application est conçue pour les personnes qui ont du mal à utiliser un téléphone portable, " +
         "et leur permet de communiquer par la voix avec quelques personnes.\n\n" +
         "Ce guide est facultatif : il permet de préparer l'application avec ce seul téléphone, sans ordinateur. " +
-        "Les étapes sont : le Wi-Fi, le bot Telegram, qui parlera, un PIN facultatif et, si vous le souhaitez, épingler l'application à l'écran. " +
+        "Les étapes sont : la connexion internet, le bot Telegram, qui parlera, un PIN facultatif et, si vous le souhaitez, épingler l'application à l'écran. " +
         "Vous pouvez le passer maintenant et y revenir depuis « Programmation ».",
-    wifiTitle = "1. Wi-Fi",
+    wifiTitle = "1. Internet",
     wifiBody = "Pour commencer, vous avez besoin de l'aide de quelqu'un pour tout préparer. Une fois ces étapes faites, tout se fera ensuite tout seul.\n\n" +
-        "Ce téléphone ne fonctionnera qu'à la maison, avec le Wi-Fi de la maison : il n'a ni numéro de téléphone ni données mobiles, " +
-        "et hors de la maison il ne recevra ni n'enverra de messages. Vérifiez qu'il est connecté au Wi-Fi, ou connectez-le maintenant.",
-    wifiOn = "Connecté au Wi-Fi ✔", wifiOff = "Pas encore connecté à un Wi-Fi", wifiBtn = "Ouvrir les réglages Wi-Fi",
+        "Ce téléphone a besoin d'internet pour recevoir et envoyer des messages. Le plus simple et gratuit est le Wi-Fi de la maison. " +
+        "S'il n'y a pas de Wi-Fi à la maison, il fonctionne aussi avec une carte SIM avec données mobiles (seule la carte est nécessaire ; inutile de s'en servir pour téléphoner). " +
+        "Sans aucun des deux, il ne recevra ni n'enverra rien. Vérifiez qu'il est connecté, ou connectez-le maintenant.",
+    wifiOn = "Connecté à internet ✔", wifiOff = "Pas encore connecté à internet", wifiBtn = "Ouvrir les réglages Wi-Fi",
     botTitle = "2. Le bot Telegram",
     botSteps = "Il vous faut l'application Telegram installée sur un téléphone pour pouvoir préparer cela. " +
         "Chaque appareil a son propre bot, que vous créez.\n\n" +
@@ -305,7 +309,7 @@ fun TutorialScreen(
     var number by remember { mutableStateOf("") }
     var saved by remember { mutableStateOf(false) }
     var showLevels by remember { mutableStateOf(false) }
-    var wifi by remember { mutableStateOf(wifiConnected(context)) }
+    var wifi by remember { mutableStateOf(internetConnected(context)) }
     var pin by remember { mutableStateOf(prefs.pin) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
     var contactsNow by remember { mutableStateOf(AppConfig.load(context).contacts.filter { it.telegramId != null }) }
@@ -320,7 +324,7 @@ fun TutorialScreen(
     LaunchedEffect(Unit) {
         while (true) {
             stranger = prefs.stranger
-            wifi = wifiConnected(context)
+            wifi = internetConnected(context)
             delay(2_000)
         }
     }

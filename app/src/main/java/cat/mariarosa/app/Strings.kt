@@ -120,12 +120,12 @@ object S {
     )
     val openGuide get() = tr("Obre la guia pas a pas", "Abrir la guía paso a paso", "Open the step-by-step guide", "Ouvrir le guide pas à pas")
     val nowTitle get() = tr("Com està ara", "Cómo está ahora", "How things stand", "État actuel")
-    val wifiOk get() = tr("Wi-Fi: connectat ✔", "Wi-Fi: conectado ✔", "Wi-Fi: connected ✔", "Wi-Fi : connecté ✔")
+    val wifiOk get() = tr("Internet: connectat ✔", "Internet: conectado ✔", "Internet: connected ✔", "Internet : connecté ✔")
     val wifiNo get() = tr(
-        "Wi-Fi: no connectat. Sense Wi-Fi no es poden rebre ni enviar missatges.",
-        "Wi-Fi: no conectado. Sin Wi-Fi no se pueden recibir ni enviar mensajes.",
-        "Wi-Fi: not connected. Without Wi-Fi no messages can be received or sent.",
-        "Wi-Fi : non connecté. Sans Wi-Fi, impossible de recevoir ou d'envoyer des messages.",
+        "Internet: no connectat. Sense internet no es poden rebre ni enviar missatges.",
+        "Internet: no conectado. Sin internet no se pueden recibir ni enviar mensajes.",
+        "Internet: not connected. Without internet no messages can be received or sent.",
+        "Internet : non connecté. Sans internet, impossible de recevoir ou d'envoyer des messages.",
     )
     val connectWifi get() = tr("Connecta al Wi-Fi", "Conectar al Wi-Fi", "Connect to Wi-Fi", "Se connecter au Wi-Fi")
     val changeWifi get() = tr("Canvia de Wi-Fi", "Cambiar de Wi-Fi", "Change Wi-Fi", "Changer de Wi-Fi")

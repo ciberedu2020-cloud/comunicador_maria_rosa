@@ -110,7 +110,7 @@ fun SettingsScreen(
     var botName by remember { mutableStateOf<String?>(null) }
     var botChecked by remember { mutableStateOf(false) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
-    var wifi by remember { mutableStateOf(wifiConnected(context)) }
+    var wifi by remember { mutableStateOf(internetConnected(context)) }
     var showLevels by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -122,7 +122,7 @@ fun SettingsScreen(
     // Wi-Fi and newcomers are kept up to date while this screen is open.
     LaunchedEffect(Unit) {
         while (true) {
-            wifi = wifiConnected(context)
+            wifi = internetConnected(context)
             stranger = prefs.stranger
             delay(2_000)
         }

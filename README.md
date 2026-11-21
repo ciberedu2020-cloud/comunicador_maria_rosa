@@ -36,7 +36,7 @@ s'escolta amb un toc.
   taronja/verd) el botó d'aquell contacte; els altres no fan res mentre dura. L'avís sonor és el mateix per a tots.
 - **Guia de configuració (opcional):** surt **la primera vegada després d'instal·lar** l'app (amb tot el que això comporta:
   sense ella ningú sabria com programar-la), en català, castellà, anglès o francès. Es pot saltar a qualsevol pas i
-  llavors no torna a sortir sola; es reobre des de Programació. Passos: (1) Wi-Fi, amb l'estat i un botó per connectar-s'hi;
+  llavors no torna a sortir sola; es reobre des de Programació. Passos: (1) internet (Wi-Fi de casa o targeta SIM amb dades; l'app funciona amb qualsevol), amb l'estat i un botó per als ajustos de Wi-Fi;
   (2) el bot: cada aparell té el seu, que crea qui el prepara amb @BotFather i en pega el token, que es comprova abans
   de desar-lo; (3) qui hi parlarà (nom, article i número, que surt sol quan la persona escriu al bot); (4) PIN opcional;
   (5) fixar l'app. La pregunta de la bateria només es fa un cop, en instal·lar. **Idioma:** tota l'app (la pantalla de la persona, Programació, la guia i els missatges que el bot envia) està en català,
