@@ -162,6 +162,13 @@ Perquè `adb` el vegi: opcions de desenvolupador → **Depuració per USB**, i a
 - Pantalla que baixi la brillantor o s'apagui de nit (evita marcar-la i gastar bateria).
 - Icona retocada, i fases 3–5 (fotos i text llegit en veu alta, més contactes, pregunta a la IA).
 
+## Publicació a Google Play
+
+El paquet (fitxa en quatre idiomes, política de privadesa, gràfics, captures i `.aab` sense signar) és a
+`../Comunicador Maria Rosa - paquet Google Play/`. El paquet de Play **no porta token de bot ni contactes**: cada mòbil se'n fa el
+seu amb la guia. La clau de signatura (`*.jks`) i `keystore.properties` no es pugen mai al repositori. Per compilar el paquet:
+`./gradlew bundleRelease`. Abans de cada pujada, pujar el `versionCode` a `app/build.gradle.kts`.
+
 ## Llicències
 
 Codi sota **GNU GPL v3** (`LICENSE`). Tipografia **Atkinson Hyperlegible** (`OFL-AtkinsonHyperlegible.txt`).

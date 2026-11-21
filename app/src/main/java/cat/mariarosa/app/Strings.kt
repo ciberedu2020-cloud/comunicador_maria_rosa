@@ -93,6 +93,23 @@ object S {
     val enter get() = tr("Entra", "Entrar", "Enter", "Entrer")
     val cancel get() = tr("Cancel·la", "Cancelar", "Cancel", "Annuler")
 
+    val setupTitle get() = tr("Falta configurar l'aplicació", "Falta configurar la aplicación", "The app still needs to be set up", "L'application doit encore être configurée")
+    val setupHint get() = tr(
+        "Toca «Programació» a dalt a la dreta.",
+        "Toca «Programación» arriba a la derecha.",
+        "Tap \"Programming\" at the top right.",
+        "Touchez « Programmation » en haut à droite.",
+    )
+    val micTitle get() = tr("Permís del micròfon", "Permiso del micrófono", "Microphone permission", "Autorisation du microphone")
+    val micBody get() = tr(
+        "Aquesta app fa servir el micròfon només quan toques el botó de respondre, per gravar la teva veu. Cada gravació s'envia com a nota de veu, a través de Telegram, a la persona que has triat. L'app no la guarda un cop enviada i no la comparteix amb ningú més. Si no ho permets, no podràs respondre per veu.",
+        "Esta app usa el micrófono solo cuando tocas el botón de responder, para grabar tu voz. Cada grabación se envía como nota de voz, a través de Telegram, a la persona que has elegido. La app no la guarda una vez enviada y no la comparte con nadie más. Si no lo permites, no podrás responder por voz.",
+        "This app uses the microphone only when you tap the reply button, to record your voice. Each recording is sent as a voice message, through Telegram, to the person you chose. The app does not keep it once sent and does not share it with anyone else. If you do not allow it, you will not be able to reply by voice.",
+        "Cette application utilise le microphone uniquement lorsque vous touchez le bouton de réponse, pour enregistrer votre voix. Chaque enregistrement est envoyé comme message vocal, via Telegram, à la personne que vous avez choisie. L'application ne le conserve pas une fois envoyé et ne le partage avec personne d'autre. Si vous ne l'autorisez pas, vous ne pourrez pas répondre par la voix.",
+    )
+    val micContinue get() = tr("Continua", "Continuar", "Continue", "Continuer")
+    val micNotNow get() = tr("Ara no", "Ahora no", "Not now", "Pas maintenant")
+    val micBtn get() = tr("Permís del micròfon", "Permiso del micrófono", "Microphone permission", "Autorisation du microphone")
     val waiting get() = tr("Esperant missatges", "Esperando mensajes", "Waiting for messages", "En attente de messages")
 
     // ---- What the bot says to the other person on Telegram ----

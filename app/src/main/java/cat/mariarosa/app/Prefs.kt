@@ -32,6 +32,11 @@ class Prefs(context: Context) {
         get() = p.getBoolean("batteryAsked", false)
         set(v) = p.edit().putBoolean("batteryAsked", v).apply()
 
+    /** The microphone explanation was shown (and answered) once: it is not repeated by itself. */
+    var micAsked: Boolean
+        get() = p.getBoolean("micAsked", false)
+        set(v) = p.edit().putBoolean("micAsked", v).apply()
+
     /** "ca", "es", "en" or "fr" for the guide; empty = follow the phone's language. */
     var lang: String
         get() = p.getString("lang", "") ?: ""

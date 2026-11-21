@@ -97,6 +97,7 @@ fun SettingsScreen(
     onHome: () -> Unit,
     onTutorial: () -> Unit,
     onBattery: () -> Unit,
+    onMic: () -> Unit,
     onDone: () -> Unit,
 ) {
     val prefs = remember { Prefs(context) }
@@ -260,6 +261,7 @@ fun SettingsScreen(
             Heading(S.batteryTitle)
             Body(S.batteryBody)
             Big(S.batteryBtn, onClick = onBattery)
+            Big(S.micBtn, onClick = onMic)
 
             Big(S.saveBack, primary = true, enabled = !pinBad) {
                 prefs.saveContacts(drafts.map { it.toContact() }.filter { it.name.isNotEmpty() })

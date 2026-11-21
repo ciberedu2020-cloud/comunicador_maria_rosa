@@ -61,7 +61,9 @@ class MainActivity : ComponentActivity() {
     private var config by mutableStateOf(AppConfig.Fallback)
     private var screen by mutableStateOf(Screen.Home)
     private var askPin by mutableStateOf(false)
+    private var micDisclosure by mutableStateOf(false)
     private var pinned = false
+    private var onMicChoice: (Boolean) -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,15 +91,24 @@ class MainActivity : ComponentActivity() {
             askBatteryExemption()
         }
         val askHome = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
-        val wanted = buildList {
-            if (config.features.reply &&
-                checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-            ) add(Manifest.permission.RECORD_AUDIO)
+        val notifications = buildList {
             if (Build.VERSION.SDK_INT >= 33 &&
                 checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
             ) add(Manifest.permission.POST_NOTIFICATIONS)
         }
-        if (wanted.isNotEmpty()) askPermissions.launch(wanted.toTypedArray()) else askBatteryExemption()
+        val micNeeded = config.features.reply &&
+            checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+        // The microphone is never asked for without first saying, in the app, what it is for
+        // (Google Play requires it). That explanation is shown once, here, to the adult setting up.
+        onMicChoice = { allow ->
+            micDisclosure = false
+            prefs.micAsked = true
+            val list = notifications + (if (allow) listOf(Manifest.permission.RECORD_AUDIO) else emptyList())
+            if (list.isNotEmpty()) askPermissions.launch(list.toTypedArray()) else askBatteryExemption()
+        }
+        if (micNeeded && !prefs.micAsked) micDisclosure = true
+        else if (notifications.isNotEmpty()) askPermissions.launch(notifications.toTypedArray())
+        else askBatteryExemption()
         // Keeps listening when the screen goes off or this window is covered.
         startForegroundService(Intent(this, MessengerService::class.java))
         val messenger = Messenger.get(this)
@@ -141,6 +152,7 @@ class MainActivity : ComponentActivity() {
                     onHome = chooseHome,
                     onTutorial = { screen = Screen.Tutorial },
                     onBattery = { askBatteryExemption(force = true) },
+                    onMic = { micDisclosure = true },
                 ) {
                     applyConfig()
                     screen = Screen.Home
@@ -152,6 +164,13 @@ class MainActivity : ComponentActivity() {
                     if (prefs.pin.isEmpty()) openSettings(messenger) else askPin = true
                 }
             }
+            if (micDisclosure) androidx.compose.material3.AlertDialog(
+                onDismissRequest = {},
+                title = { Text(S.micTitle) },
+                text = { Text(S.micBody) },
+                confirmButton = { TextButton(onClick = { onMicChoice(true) }) { Text(S.micContinue) } },
+                dismissButton = { TextButton(onClick = { onMicChoice(false) }) { Text(S.micNotNow) } },
+            )
             if (askPin) PinDialog(prefs.pin, onClose = { askPin = false }) {
                 askPin = false
                 openSettings(messenger)
@@ -265,12 +284,16 @@ private fun Home(
                 modifier = Modifier.fillMaxWidth().clickable { onSettings() }.padding(vertical = 4.dp),
             )
         }
-        if (contacts.isEmpty()) {
+        if (nobodyYet) {
+            // Nobody to talk to yet: say so, and where to go, instead of buttons that cannot work.
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(S.noContacts, color = Color.White, fontFamily = Atkinson, fontSize = 32.sp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(S.setupTitle, color = Color.White, fontFamily = Atkinson, fontWeight = FontWeight.Bold, fontSize = 36.sp, textAlign = TextAlign.Center)
+                    Text(S.setupHint, color = Color.White, fontFamily = Atkinson, fontSize = 26.sp, textAlign = TextAlign.Center)
+                }
             }
         }
-        contacts.forEach { contact ->
+        (if (nobodyYet) emptyList() else contacts).forEach { contact ->
             val waiting = state.pending[contact.id] ?: 0
             val playing = state.playingContact == contact.id
             val (colour, title, subtitle) = when {
