@@ -28,6 +28,16 @@ s'escolta amb un toc.
   l'article de cada contacte, el número de Telegram, so d'avís sí/no, PIN opcional i un accés als ajustos de Wi-Fi.
   Entrar-hi **esborra la nota que esperava** (qui programa no parla). La primera vegada, si no hi ha cap contacte amb número,
   l'app s'obre directament aquí. Si algú desconegut escriu al bot, apareix a la pantalla amb un botó per afegir-lo.
+- **Dos o més contactes:** cada contacte té els seus botons. Quan en graves un, només es posa en vermell (i després en
+  taronja/verd) el botó d'aquell contacte; els altres no fan res mentre dura. L'avís sonor és el mateix per a tots.
+- **Guia de configuració (opcional):** la primera vegada, si no hi ha cap contacte amb número, s'ofereix una guia en
+  català, castellà o anglès. Explica com crear el bot amb @BotFather i enganxar-ne el token (es comprova abans de desar-lo),
+  com afegir la persona (nom, article i número, que també surt sol quan ella escriu al bot) i com fixar l'app a la pantalla.
+  Es pot saltar a qualsevol pas; si es salta, no torna a sortir sola. Sempre es pot reobrir des de «Programació».
+  Només la guia és multillenguatge; la resta de pantalles estan en català.
+- **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
+  i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
+  No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.
 - Si no hi ha internet, ho diu a la pantalla: «Sense connexió a internet».
 - Es manté en marxa amb la pantalla apagada (servei en primer pla) i **arrenca sola** quan es reinicia el mòbil.
 
@@ -134,6 +144,8 @@ Perquè `adb` el vegi: opcions de desenvolupador → **Depuració per USB**, i a
   **10 minuts** encesa (`screenOnMinutes` a `config.json`) i es torna a apagar. Cal que el mòbil no tingui bloqueig de pantalla.
   Sense mode quiosc, l'apagat és el temps d'espera del sistema més els 10 minuts, no exacte.
   Risc: un missatge que ningú escolta deixa la pantalla encesa tota la nit.
+- **Token del bot al mòbil:** ja es pot canviar des de la guia sense recompilar; cada mòbil ha de tenir el seu bot
+  (Telegram no deixa que dos aparells llegeixin el mateix bot alhora). El token de l'APK és només el del bot de proves.
 - **Mode quiosc:** app administradora del dispositiu, amb sortida oculta només per a adults (p. ex. cinc tocs i un PIN)
   per arribar als ajustos de Wi-Fi. Cal un aparell que es pugui restaurar de fàbrica, sense comptes.
 - Pantalla que baixi la brillantor o s'apagui de nit (evita marcar-la i gastar bateria).

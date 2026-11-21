@@ -35,6 +35,8 @@ data class UiState(
     val countdown: Int? = null,
     /** The programming door stays open a few seconds after a recording is thrown away. */
     val doorOpen: Boolean = false,
+    /** Which contact the reply buttons' state (recording, count, notice) belongs to. */
+    val replyContact: String? = null,
 )
 
 /**
@@ -50,7 +52,8 @@ class Messenger private constructor(context: Context, @Volatile private var conf
     private val app = context.applicationContext
     private val prefs = Prefs(app)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private val client = TelegramClient(BuildConfig.TELEGRAM_TOKEN)
+    @Volatile private var token = prefs.effectiveToken()
+    @Volatile private var client = TelegramClient(token)
     private val inbox = Inbox(app)
     private val dir = File(app.filesDir, "voice").apply { mkdirs() }
 
@@ -131,6 +134,13 @@ class Messenger private constructor(context: Context, @Volatile private var conf
     /** The programming screen changed the contacts: use them from now on. */
     fun reload(newConfig: AppConfig) {
         config = newConfig
+        val t = prefs.effectiveToken()
+        if (t != token) {
+            // Another bot: its message numbers start again, so the old offset is meaningless.
+            token = t
+            inbox.setOffset(0)
+            client = TelegramClient(t)
+        }
     }
 
     fun start() {
@@ -230,13 +240,16 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         if (now - lastReplyTap < 700) return
         lastReplyTap = now
         when {
-            _state.value.recording -> finishRecording(contactId)
+            // While one contact is being recorded or sent, the other's button does nothing.
+            _state.value.recording ->
+                if (_state.value.replyContact == contactId) finishRecording(contactId)
             _state.value.notice == Notice.Sending || _state.value.countdown != null -> Unit
-            else -> startRecording()
+            else -> startRecording(contactId)
         }
     }
 
-    private fun startRecording() {
+    private fun startRecording(contactId: String) {
+        _state.value = _state.value.copy(replyContact = contactId)
         if (app.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             showNotice(Notice.Failed)
             return
@@ -268,7 +281,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
                     _state.value = _state.value.copy(recordSeconds = secs)
                     // Two minutes is plenty; stops her leaving it recording by accident.
                     if (secs >= MAX_RECORD_SECONDS) {
-                        config.activeContacts.firstOrNull()?.let { finishRecording(it.id) }
+                        finishRecording(contactId)
                         break
                     }
                 }
@@ -294,6 +307,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         r?.runCatching { release() }
         if (!ok || file == null || secs < 1) {
             file?.delete()
+            _state.value = _state.value.copy(replyContact = null)
             return
         }
         val chatId = config.contacts.firstOrNull { it.id == contactId }?.telegramId
@@ -390,7 +404,7 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         _state.value = _state.value.copy(notice = notice)
         noticeJob = scope.launch {
             delay(5_000)
-            _state.value = _state.value.copy(notice = null)
+            _state.value = _state.value.copy(notice = null, replyContact = null)
         }
     }
 
@@ -400,7 +414,10 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         var failures = 0
         while (true) {
             try {
-                val updates = client.getUpdates(inbox.offset(), 25)
+                val c = client
+                val updates = c.getUpdates(inbox.offset(), 25)
+                // The bot was changed while waiting: these belong to the old one.
+                if (c !== client) continue
                 for (i in 0 until updates.length()) {
                     val u = updates.getJSONObject(i)
                     handle(u)

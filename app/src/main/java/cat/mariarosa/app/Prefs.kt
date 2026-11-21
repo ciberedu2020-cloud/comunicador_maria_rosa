@@ -15,6 +15,23 @@ class Prefs(context: Context) {
         get() = p.getBoolean("sound", true)
         set(v) = p.edit().putBoolean("sound", v).apply()
 
+    /** A bot token typed in the assistant; empty = use the one built into the app. */
+    var token: String
+        get() = p.getString("token", "") ?: ""
+        set(v) = p.edit().putString("token", v.trim()).apply()
+
+    fun effectiveToken(): String = token.ifBlank { BuildConfig.TELEGRAM_TOKEN }
+
+    /** True once the first-time guide was finished or skipped: it is not offered again by itself. */
+    var tutorialDone: Boolean
+        get() = p.getBoolean("tutorialDone", false)
+        set(v) = p.edit().putBoolean("tutorialDone", v).apply()
+
+    /** "ca", "es" or "en" for the guide; empty = follow the phone's language. */
+    var lang: String
+        get() = p.getString("lang", "") ?: ""
+        set(v) = p.edit().putString("lang", v).apply()
+
     /** Empty = no PIN: the programming screen opens with a tap. */
     var pin: String
         get() = p.getString("pin", "") ?: ""

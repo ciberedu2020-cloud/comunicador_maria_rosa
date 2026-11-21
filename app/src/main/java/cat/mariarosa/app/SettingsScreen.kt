@@ -1,8 +1,6 @@
 package cat.mariarosa.app
 
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -62,7 +60,11 @@ private class Draft(
 fun SettingsScreen(
     context: Context,
     initial: List<Contact>,
-    firstTime: Boolean,
+    onWifi: () -> Unit,
+    onPin: () -> Unit,
+    onUnpin: () -> Unit,
+    onHome: () -> Unit,
+    onTutorial: () -> Unit,
     onDone: () -> Unit,
 ) {
     val prefs = remember { Prefs(context) }
@@ -78,7 +80,7 @@ fun SettingsScreen(
 
     LaunchedEffect(Unit) {
         botName = withContext(Dispatchers.IO) {
-            runCatching { TelegramClient(BuildConfig.TELEGRAM_TOKEN).botUsername() }.getOrNull()
+            runCatching { TelegramClient(prefs.effectiveToken()).botUsername() }.getOrNull()
         }
     }
 
@@ -91,14 +93,7 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Programació", fontSize = 32.sp, color = Color.Black)
-        if (firstTime) {
-            Text(
-                "Primera vegada: aquí es prepara l'aparell. Afegeix la persona amb qui parlarà " +
-                    "i toca «Desa i torna».",
-                fontSize = 18.sp,
-                color = Color.DarkGray,
-            )
-        }
+        OutlinedButton(onClick = onTutorial) { Text("Obre la guia de configuració") }
         Text(
             if (botName != null) "Perquè algú hi parli, ha d'escriure «hola» a Telegram al bot @$botName i tocar Start."
             else "No es pot saber el nom del bot: comprova la connexió a internet.",
@@ -176,12 +171,17 @@ fun SettingsScreen(
             fontSize = 16.sp, color = Color.DarkGray,
         )
 
-        OutlinedButton(onClick = {
-            try {
-                context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            } catch (_: Exception) {
-            }
-        }) { Text("Obre els ajustos de Wi-Fi") }
+        Text("Fixar l'app", fontSize = 24.sp, color = Color.Black)
+        Text(
+            "Perquè quedi sempre a la pantalla. Per sortir-ne, aquí «Deixa de fixar». Després d'un reinici s'ha de tornar a fixar.",
+            fontSize = 16.sp, color = Color.DarkGray,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = onPin) { Text("Fixa l'app") }
+            OutlinedButton(onClick = onUnpin) { Text("Deixa de fixar") }
+        }
+        OutlinedButton(onClick = onHome) { Text("Que el botó d'inici torni a l'app") }
+        OutlinedButton(onClick = onWifi) { Text("Obre els ajustos de Wi-Fi") }
 
         Button(onClick = {
             prefs.saveContacts(drafts.map { it.toContact() }.filter { it.name.isNotEmpty() })

@@ -1,6 +1,7 @@
 package cat.mariarosa.app
 
 import android.Manifest
+import android.app.role.RoleManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -53,10 +54,13 @@ private val Atkinson = FontFamily(
     Font(R.font.atkinson_hyperlegible_bold, FontWeight.Bold),
 )
 
+private enum class Screen { Home, Settings, Tutorial }
+
 class MainActivity : ComponentActivity() {
     private var config by mutableStateOf(AppConfig.Fallback)
-    private var inSettings by mutableStateOf(false)
+    private var screen by mutableStateOf(Screen.Home)
     private var askPin by mutableStateOf(false)
+    private var pinned = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +72,10 @@ class MainActivity : ComponentActivity() {
             setStreamVolume(AudioManager.STREAM_ALARM, getStreamMaxVolume(AudioManager.STREAM_ALARM), 0)
         }
         config = AppConfig.load(this)
-        // First time with nobody to talk to: go straight to the programming
-        // screen, so the phone can be prepared without a computer.
-        inSettings = config.activeContacts.none { it.telegramId != null }
+        val prefs = Prefs(this)
+        // First time with nobody to talk to: offer the guide, which can be skipped
+        // (and then is not offered again by itself).
+        if (!prefs.tutorialDone && config.activeContacts.none { it.telegramId != null }) screen = Screen.Tutorial
         // Shown over the lock screen and able to light the screen: it is a
         // mailbox that sits on a table, not a phone in a pocket.
         setShowWhenLocked(true)
@@ -81,6 +86,7 @@ class MainActivity : ComponentActivity() {
         val askPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             askBatteryExemption()
         }
+        val askHome = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
         val wanted = buildList {
             if (config.features.reply &&
                 checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
@@ -94,21 +100,44 @@ class MainActivity : ComponentActivity() {
         startForegroundService(Intent(this, MessengerService::class.java))
         val messenger = Messenger.get(this)
         messenger.start()
-        val prefs = Prefs(this)
+
+        val applyConfig = {
+            config = AppConfig.load(this)
+            messenger.reload(config)
+        }
+        val chooseHome = {
+            // Makes the home button come back to this app.
+            try {
+                val rm = getSystemService(RoleManager::class.java)
+                if (rm.isRoleAvailable(RoleManager.ROLE_HOME) && !rm.isRoleHeld(RoleManager.ROLE_HOME)) {
+                    askHome.launch(rm.createRequestRoleIntent(RoleManager.ROLE_HOME))
+                }
+            } catch (_: Exception) {
+                try { startActivity(Intent(Settings.ACTION_HOME_SETTINGS)) } catch (_: Exception) {}
+            }
+        }
         setContent {
             val state by messenger.state.collectAsState()
-            if (inSettings) {
-                SettingsScreen(
+            when (screen) {
+                Screen.Tutorial -> TutorialScreen(
+                    context = this,
+                    onApply = applyConfig,
+                    onHome = chooseHome,
+                    onPin = ::pinScreen,
+                ) { screen = Screen.Home }
+                Screen.Settings -> SettingsScreen(
                     context = this,
                     initial = AppConfig.load(this).contacts,
-                    firstTime = config.activeContacts.none { it.telegramId != null },
+                    onWifi = ::openWifi,
+                    onPin = ::pinScreen,
+                    onUnpin = ::unpinScreen,
+                    onHome = chooseHome,
+                    onTutorial = { screen = Screen.Tutorial },
                 ) {
-                    config = AppConfig.load(this)
-                    messenger.reload(config)
-                    inSettings = false
+                    applyConfig()
+                    screen = Screen.Home
                 }
-            } else {
-                Home(
+                Screen.Home -> Home(
                     config, state, messenger::onTap, messenger::onReplyTap, messenger::onCancelSend,
                     messenger::onSendNow,
                 ) {
@@ -122,10 +151,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /** Keeps this app on the screen; Android asks the person to confirm. Home and recents stop working. */
+    private fun pinScreen() {
+        try { startLockTask(); pinned = true } catch (_: Exception) {}
+    }
+
+    private fun unpinScreen() {
+        try { stopLockTask() } catch (_: Exception) {}
+        pinned = false
+    }
+
+    /** Pinned apps cannot open other screens, so the Wi-Fi settings need the pin lifted first. */
+    private fun openWifi() {
+        unpinScreen()
+        try { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) } catch (_: Exception) {}
+    }
+
     /** A recording waiting to be sent is thrown away: the adult is here to program, not to talk. */
     private fun openSettings(messenger: Messenger) {
         messenger.onCancelSend(keepDoor = false)
-        inSettings = true
+        screen = Screen.Settings
     }
 
     /** Asks Android not to put the app to sleep to save battery. Asked until it is granted. */
@@ -214,19 +259,23 @@ private fun Home(
                 }
             }
             if (config.features.reply) {
+                // Recording, counting and results belong to ONE contact: only her buttons change.
+                val mine = state.replyContact == contact.id
+                val recording = mine && state.recording
+                val notice = if (mine) state.notice else null
                 val (rColour, rTitle, rSubtitle) = when {
-                    state.recording -> Triple(
+                    recording -> Triple(
                         Red,
                         "Gravant… ${state.recordSeconds / 60}:${"%02d".format(state.recordSeconds % 60)}",
                         "Toca per enviar",
                     )
-                    state.notice == Notice.Sending -> Triple(Blue, "Enviant…", "")
-                    state.notice == Notice.Sent -> Triple(Green, "Enviat ✔", "${contact.fullCapital} ho rebrà")
-                    state.notice == Notice.Failed -> Triple(Orange, "No s'ha pogut enviar", "Torna-ho a provar")
-                    state.notice == Notice.Discarded -> Triple(Light, "Esborrat", "No s'ha enviat")
+                    notice == Notice.Sending -> Triple(Blue, "Enviant…", "")
+                    notice == Notice.Sent -> Triple(Green, "Enviat ✔", "${contact.fullCapital} ho rebrà")
+                    notice == Notice.Failed -> Triple(Orange, "No s'ha pogut enviar", "Torna-ho a provar")
+                    notice == Notice.Discarded -> Triple(Light, "Esborrat", "No s'ha enviat")
                     else -> Triple(Light, "Respon a ${contact.full}", "Toca i parla")
                 }
-                val countdown = state.countdown
+                val countdown = if (mine) state.countdown else null
                 if (countdown != null) {
                     // A recording is waiting: it goes by itself, or the X throws it away.
                     Row(
