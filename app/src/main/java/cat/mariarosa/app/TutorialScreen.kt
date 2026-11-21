@@ -309,6 +309,13 @@ fun TutorialScreen(
     var number by remember { mutableStateOf("") }
     var saved by remember { mutableStateOf(false) }
     var showLevels by remember { mutableStateOf(false) }
+    // Opening the text must be visible: the screen scrolls down to show it.
+    LaunchedEffect(showLevels) {
+        if (showLevels) {
+            delay(150)
+            scroll.animateScrollTo(scroll.maxValue)
+        }
+    }
     var wifi by remember { mutableStateOf(internetConnected(context)) }
     var pin by remember { mutableStateOf(prefs.pin) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
@@ -451,8 +458,14 @@ fun TutorialScreen(
                     OutlinedButton(onClick = onHome) { Text(w.btnHome) }
                     OutlinedButton(onClick = onPin) { Text(w.btnPin) }
                     Text(w.fixExit, fontSize = 17.sp, color = Color.DarkGray)
-                    TextButton(onClick = { showLevels = !showLevels }) { Text(if (showLevels) w.levelsHide else w.levelsShow) }
-                    if (showLevels) Text(w.fixLevels, fontSize = 17.sp, color = Color.DarkGray)
+                    OutlinedButton(onClick = { showLevels = !showLevels }, modifier = Modifier.fillMaxWidth()) {
+                        Text(if (showLevels) "▲ ${w.levelsHide}" else "▼ ${w.levelsShow}")
+                    }
+                    if (showLevels) {
+                        Column(
+                            Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFFE8EAF6)).padding(14.dp),
+                        ) { Text(w.fixLevels, fontSize = 17.sp, color = Color.DarkGray) }
+                    }
                 }
                 else -> {
                     Text(w.doneTitle, fontSize = 30.sp, color = Color.Black)

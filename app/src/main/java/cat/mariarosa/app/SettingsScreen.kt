@@ -112,6 +112,14 @@ fun SettingsScreen(
     var stranger by remember { mutableStateOf(prefs.stranger) }
     var wifi by remember { mutableStateOf(internetConnected(context)) }
     var showLevels by remember { mutableStateOf(false) }
+    val scroll = rememberScrollState()
+    // Opening the text must be visible: the screen scrolls down to show it.
+    LaunchedEffect(showLevels) {
+        if (showLevels) {
+            delay(150)
+            scroll.animateScrollTo(scroll.maxValue)
+        }
+    }
 
     LaunchedEffect(Unit) {
         botName = withContext(Dispatchers.IO) {
@@ -135,7 +143,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scroll)
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
@@ -241,13 +249,13 @@ fun SettingsScreen(
 
             Heading(S.pinAppTitle)
             val w = wordsFor(Lang.current)
-            Body(w.fixIntro)
+            Body(S.fixSettingsIntro)
             Big(w.btnPin, onClick = onPin)
             Big(S.unpin, onClick = onUnpin)
             Big(w.btnHome, onClick = onHome)
-            Body(w.fixExit)
-            Big(if (showLevels) w.levelsHide else w.levelsShow) { showLevels = !showLevels }
-            if (showLevels) Body(w.fixLevels)
+            Body(S.exitShort)
+            Big(if (showLevels) "▲ ${w.levelsHide}" else "▼ ${w.levelsShow}") { showLevels = !showLevels }
+            if (showLevels) Card(background = Color(0xFFE8EAF6)) { Body(w.fixLevels) }
 
             Heading(S.batteryTitle)
             Body(S.batteryBody)

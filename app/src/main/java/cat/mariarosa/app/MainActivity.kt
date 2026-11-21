@@ -242,7 +242,7 @@ private fun Home(
     val n = contacts.size
     // The more people share the screen, the smaller the letters; from three on,
     // each person gets one row (listen | reply) instead of two stacked buttons.
-    val scale = when { n <= 1 -> 1f; n == 2 -> 0.65f; else -> 0.5f }
+    val scale = when (n) { 0, 1 -> 1f; 2 -> 0.85f; 3 -> 0.7f; 4 -> 0.6f; else -> 0.52f }
     val compact = n >= 3
     val gap = if (compact) 8.dp else 16.dp
     Column(

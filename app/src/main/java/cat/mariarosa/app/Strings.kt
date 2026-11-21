@@ -139,10 +139,22 @@ object S {
     val botChecking get() = tr("Bot de Telegram: comprovant…", "Bot de Telegram: comprobando…", "Telegram bot: checking…", "Bot Telegram : vérification…")
     val contactsTitle get() = tr("Contactes", "Contactos", "Contacts", "Contacts")
     val contactsHint get() = tr(
-        "Una persona surt aquí quan escriu «hola» al bot. Només cal afegir-la.",
-        "Una persona aparece aquí cuando escribe «hola» al bot. Solo hay que añadirla.",
-        "A person appears here when they write \"hello\" to the bot. You only need to add them.",
-        "Une personne apparaît ici quand elle écrit « bonjour » au bot. Il suffit de l'ajouter.",
+        "Per afegir una persona, que escrigui «hola» al bot. Quan ho faci, aquí sota et sortirà un requadre groc amb el botó «Afegeix-la com a contacte».",
+        "Para añadir a una persona, que escriba «hola» al bot. Cuando lo haga, aquí abajo te saldrá un recuadro amarillo con el botón «Añadir como contacto».",
+        "To add a person, they must write \"hello\" to the bot. When they do, a yellow box with the button \"Add as a contact\" will appear here below.",
+        "Pour ajouter une personne, elle doit écrire « bonjour » au bot. Quand elle le fera, un encadré jaune avec le bouton « Ajouter comme contact » apparaîtra ici en dessous.",
+    )
+    val fixSettingsIntro get() = tr(
+        "Perquè el mòbil serveixi només per a aquesta app.",
+        "Para que el móvil sirva solo para esta app.",
+        "So the phone is used only for this app.",
+        "Pour que le téléphone ne serve qu'à cette application.",
+    )
+    val exitShort get() = tr(
+        "Per sortir-ne: «Deixa de fixar», o mantenir premuts Enrere i Recents.",
+        "Para salir: «Dejar de fijar», o mantener pulsados Atrás y Recientes.",
+        "To leave: \"Stop pinning\", or hold Back and Recents.",
+        "Pour en sortir : « Ne plus épingler », ou maintenir Retour et Récents.",
     )
     fun wroteBot(name: String, id: Long) = tr(
         "Ha escrit al bot: $name ($id)", "Ha escrito al bot: $name ($id)", "Wrote to the bot: $name ($id)", "A écrit au bot : $name ($id)",

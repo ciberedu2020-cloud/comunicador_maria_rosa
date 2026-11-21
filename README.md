@@ -29,8 +29,8 @@ s'escolta amb un toc.
   contactes (nom, article, número; les persones noves que escriuen al bot surten soles per afegir-les d'un toc), so,
   PIN opcional (explicat: protegeix Programació, no és el del mòbil), fixar l'app i bateria. Entrar-hi **esborra la nota que
   esperava**. Amb PIN, en sortir de l'app Programació es tanca; la guia aguanta deu minuts.
-- **Fins a 5 contactes.** La lletra s'encongeix segons quanta gent hi ha (1: gran; 2: mitjana; de 3 a 5: una fila per persona
-  amb «escoltar» i «respondre» una al costat de l'altra). Cinc és el tope perquè encara es llegeixi. Durant el compte enrere de
+- **Fins a 5 contactes.** La lletra s'encongeix segons quanta gent hi ha (1: gran; 2: gairebé tan gran; de 3 a 5: una fila per persona
+  amb «escoltar» i «respondre» una al costat de l'altra, cada cop més petita). Cinc és el tope perquè encara es llegeixi. Durant el compte enrere de
   qui grava, la seva fila sencera és el compte enrere. No provat visualment amb 3-5 contactes.
 - **Dos o més contactes:** cada contacte té els seus botons. Quan en graves un, només es posa en vermell (i després en
   taronja/verd) el botó d'aquell contacte; els altres no fan res mentre dura. L'avís sonor és el mateix per a tots.
