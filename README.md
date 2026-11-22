@@ -23,6 +23,7 @@ s'escolta amb un toc.
   Després hi ha **5 segons de compte enrere**: el botó taronja **«Toca aquí per enviar ara»** l'envia a l'acte
   (ignora el primer segon i mig, perquè un doble toc no l'envii sense voler); una **X vermella** esborra la nota;
   si no es toca res, s'envia sola.
+- **Si es surt de l'app mentre grava** (tancar-la, canviar d'app, apagar la pantalla), el micròfon s'atura a l'acte i la gravació es descarta: no s'envia.
 - **Només veu**, als dos sentits. Si algú escriu text, el bot respon que de moment només rep notes de veu.
 - **Programació, sense ordinador:** durant el compte enrere, i 3 segons després d'esborrar la nota amb la X, surt a dalt,
   petit, «⚙ Programació». Se subdivideix de dalt a baix: com està ara (Wi-Fi i bot, amb botó per connectar-se al Wi-Fi),

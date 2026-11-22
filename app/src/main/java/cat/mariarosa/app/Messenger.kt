@@ -295,6 +295,23 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         }
     }
 
+    /**
+     * The app was closed or left while a recording was going: stop the microphone
+     * and throw the recording away. It is never sent, because nobody finished it on purpose.
+     */
+    fun stopRecordingAndDiscard() {
+        if (!_state.value.recording) return
+        recordJob?.cancel()
+        val r = recorder
+        val file = recordFile
+        recorder = null
+        recordFile = null
+        _state.value = _state.value.copy(recording = false, recordSeconds = 0, replyContact = null)
+        r?.runCatching { stop() }
+        r?.runCatching { release() }
+        file?.delete()
+    }
+
     private fun finishRecording(contactId: String) {
         recordJob?.cancel()
         val r = recorder

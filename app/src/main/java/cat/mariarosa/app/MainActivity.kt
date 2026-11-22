@@ -184,6 +184,8 @@ class MainActivity : ComponentActivity() {
         super.onStop()
         leftAt = SystemClock.elapsedRealtime()
         askPin = false
+        // Leaving the app (recents, home, screen off) must never leave the microphone open.
+        Messenger.get(this).stopRecordingAndDiscard()
     }
 
     /**
