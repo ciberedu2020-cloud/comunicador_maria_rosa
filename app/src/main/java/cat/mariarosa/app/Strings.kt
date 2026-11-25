@@ -156,23 +156,25 @@ object S {
     val botChecking get() = tr("Bot de Telegram: comprovant…", "Bot de Telegram: comprobando…", "Telegram bot: checking…", "Bot Telegram : vérification…")
     val contactsTitle get() = tr("Contactes", "Contactos", "Contacts", "Contacts")
     val contactsHint get() = tr(
-        "Per afegir una persona, que escrigui «hola» al bot. Quan ho faci, aquí sota et sortirà un requadre groc amb el botó «Afegeix-la com a contacte».",
-        "Para añadir a una persona, que escriba «hola» al bot. Cuando lo haga, aquí abajo te saldrá un recuadro amarillo con el botón «Añadir como contacto».",
-        "To add a person, they must write \"hello\" to the bot. When they do, a yellow box with the button \"Add as a contact\" will appear here below.",
-        "Pour ajouter une personne, elle doit écrire « bonjour » au bot. Quand elle le fera, un encadré jaune avec le bouton « Ajouter comme contact » apparaîtra ici en dessous.",
+        "Per afegir algú, que escrigui qualsevol missatge al bot de Telegram. Quan ho faci, aquí sota sortirà un requadre groc amb el botó «Afegeix-la com a contacte».",
+        "Para añadir a alguien, que escriba cualquier mensaje al bot de Telegram. Cuando lo haga, aquí abajo saldrá un recuadro amarillo con el botón «Añadir como contacto».",
+        "To add someone, they just write any message to the Telegram bot. When they do, a yellow box with the button \"Add as a contact\" will appear below.",
+        "Pour ajouter quelqu'un, il suffit qu'il écrive n'importe quel message au bot Telegram. Dès qu'il l'aura fait, un encadré jaune avec le bouton « Ajouter comme contact » apparaîtra ci-dessous.",
     )
     val fixSettingsIntro get() = tr(
-        "Perquè el mòbil serveixi només per a aquesta app.",
-        "Para que el móvil sirva solo para esta app.",
-        "So the phone is used only for this app.",
-        "Pour que le téléphone ne serve qu'à cette application.",
+        "Així el mòbil només serveix per a aquesta app. Android et demanarà que ho confirmis. Per sortir-ne, toca «Deixa de fixar» o, si no hi ets, mantén premuts Enrere i Recents.",
+        "Así el móvil solo sirve para esta app. Android te pedirá que lo confirmes. Para salir, toca «Dejar de fijar» o, si no estás, mantén pulsados Atrás y Recientes.",
+        "This way the phone is only used for this app. Android will ask you to confirm. To leave, tap \"Stop pinning\" or, if you are not here, hold Back and Recents.",
+        "Ainsi le téléphone ne sert qu'à cette application. Android vous demandera de confirmer. Pour en sortir, touchez « Ne plus épingler » ou, si vous n'êtes pas là, maintenez Retour et Récents.",
     )
-    val exitShort get() = tr(
-        "Per sortir-ne: «Deixa de fixar», o mantenir premuts Enrere i Recents.",
-        "Para salir: «Dejar de fijar», o mantener pulsados Atrás y Recientes.",
-        "To leave: \"Stop pinning\", or hold Back and Recents.",
-        "Pour en sortir : « Ne plus épingler », ou maintenir Retour et Récents.",
+    val removeAsk get() = tr(
+        "Si prems aquest botó, perdràs el contacte. N'estàs segur?",
+        "Si pulsas este botón, perderás el contacto. ¿Estás seguro?",
+        "If you press this button, you will lose the contact. Are you sure?",
+        "Si vous appuyez sur ce bouton, vous perdrez le contact. Êtes-vous sûr ?",
     )
+    val removeYes get() = tr("Sí, treu-lo", "Sí, quitarlo", "Yes, remove it", "Oui, le retirer")
+    val removeNo get() = tr("No, deixa'l", "No, dejarlo", "No, keep it", "Non, le garder")
     fun wroteBot(name: String, id: Long) = tr(
         "Ha escrit al bot: $name ($id)", "Ha escrito al bot: $name ($id)", "Wrote to the bot: $name ($id)", "A écrit au bot : $name ($id)",
     )
@@ -199,29 +201,29 @@ object S {
     val soundOff get() = tr("Sense avís sonor", "Sin aviso sonoro", "No chime", "Pas de signal sonore")
     val protectTitle get() = tr("Protegir aquesta pantalla", "Proteger esta pantalla", "Protect this screen", "Protéger cet écran")
     val protectBody get() = tr(
-        "Si poses un PIN de 4 xifres, qui vulgui entrar a Programació l'haurà d'escriure. Serveix perquè ningú més (per exemple, els nets) hi canviï res. No és el codi per desbloquejar el mòbil.",
-        "Si pones un PIN de 4 cifras, quien quiera entrar en Programación tendrá que escribirlo. Sirve para que nadie más (por ejemplo, los nietos) cambie nada. No es el código para desbloquear el móvil.",
-        "If you set a 4-digit PIN, anyone who wants to open Programming will have to type it. It stops anyone else (for example, the grandchildren) from changing anything. It is not the code that unlocks the phone.",
-        "Si vous mettez un code PIN à 4 chiffres, toute personne voulant ouvrir Programmation devra le saisir. Cela évite que quelqu'un d'autre (par exemple les petits-enfants) change quoi que ce soit. Ce n'est pas le code de déverrouillage du téléphone.",
+        "Un PIN de 4 xifres evita que ningú més canviï res aquí (per exemple, els nets). No és el codi per desbloquejar el mòbil.",
+        "Un PIN de 4 cifras evita que nadie más cambie nada aquí (por ejemplo, los nietos). No es el código para desbloquear el móvil.",
+        "A 4-digit PIN stops anyone else from changing anything here (for example, the grandchildren). It is not the code that unlocks the phone.",
+        "Un code PIN à 4 chiffres évite que quelqu'un d'autre change quoi que ce soit ici (par exemple les petits-enfants). Ce n'est pas le code de déverrouillage du téléphone.",
     )
     val pinField get() = tr("PIN (4 xifres; buit = sense PIN)", "PIN (4 cifras; vacío = sin PIN)", "PIN (4 digits; empty = no PIN)", "PIN (4 chiffres ; vide = sans PIN)")
     val pinMust4 get() = tr("El PIN ha de tenir 4 xifres.", "El PIN debe tener 4 cifras.", "The PIN must have 4 digits.", "Le PIN doit avoir 4 chiffres.")
     val pinNote get() = tr(
-        "Apunta'l en un lloc segur: si s'oblida, només es pot treure reinstal·lant l'app i es perd la configuració.",
-        "Anótalo en un lugar seguro: si se olvida, solo se puede quitar reinstalando la app y se pierde la configuración.",
-        "Write it down somewhere safe: if forgotten, it can only be removed by reinstalling the app, and the settings are lost.",
-        "Notez-le en lieu sûr : en cas d'oubli, on ne peut l'enlever qu'en réinstallant l'application, et les réglages sont perdus.",
+        "Apunta'l: si s'oblida, només es pot treure reinstal·lant l'app.",
+        "Anótalo: si se olvida, solo se puede quitar reinstalando la app.",
+        "Write it down: if forgotten, it can only be removed by reinstalling the app.",
+        "Notez-le : en cas d'oubli, on ne peut l'enlever qu'en réinstallant l'application.",
     )
     val pinAppTitle get() = tr("Fixar l'app", "Fijar la app", "Pin the app", "Épingler l'application")
     val unpin get() = tr("Deixa de fixar", "Dejar de fijar", "Stop pinning", "Ne plus épingler")
     val batteryTitle get() = tr("Bateria", "Batería", "Battery", "Batterie")
     val batteryBody get() = tr(
-        "L'app ha de poder funcionar amb la pantalla apagada. Si Android l'aturés, torna a demanar aquest permís.",
-        "La app debe poder funcionar con la pantalla apagada. Si Android la parara, vuelve a pedir este permiso.",
-        "The app must be able to run with the screen off. If Android stopped it, ask for this permission again.",
-        "L'application doit pouvoir fonctionner écran éteint. Si Android l'arrêtait, redemandez cette autorisation.",
+        "Android pot aturar l'app per estalviar bateria, i llavors no arribarien els missatges. Cal permetre que funcioni sempre.",
+        "Android puede parar la app para ahorrar batería, y entonces no llegarían los mensajes. Hay que permitir que funcione siempre.",
+        "Android may stop the app to save battery, and then messages would not arrive. It must be allowed to run all the time.",
+        "Android peut arrêter l'application pour économiser la batterie, et les messages n'arriveraient plus. Il faut l'autoriser à fonctionner en permanence.",
     )
-    val batteryBtn get() = tr("Torna a demanar l'exempció de bateria", "Volver a pedir la exención de batería", "Ask for the battery exemption again", "Redemander l'exemption de batterie")
+    val batteryBtn get() = tr("Permet que funcioni sempre", "Permitir que funcione siempre", "Allow it to run all the time", "Autoriser le fonctionnement permanent")
     val saveBack get() = tr("Desa i torna", "Guardar y volver", "Save and go back", "Enregistrer et revenir")
     val backNoSave get() = tr("Torna sense desar", "Volver sin guardar", "Go back without saving", "Revenir sans enregistrer")
     val languageTitle get() = tr("Idioma", "Idioma", "Language", "Langue")

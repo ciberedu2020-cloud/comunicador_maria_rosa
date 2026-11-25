@@ -21,7 +21,7 @@ android {
         applicationId = "cat.mariarosa.app"
         // 29 = Android 10: the first version that records voice as Ogg/Opus,
         // the format Telegram accepts as a voice message.
-        minSdk = 29
+        minSdk = 28
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"

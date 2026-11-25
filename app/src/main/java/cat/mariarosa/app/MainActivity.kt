@@ -10,6 +10,11 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.media.AudioManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.os.SystemClock
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -56,6 +61,8 @@ internal val Atkinson = FontFamily(
 )
 
 private enum class Screen { Home, Settings, Tutorial }
+
+private const val REST_MINUTES = 10
 
 class MainActivity : ComponentActivity() {
     private var config by mutableStateOf(AppConfig.Fallback)
@@ -121,9 +128,13 @@ class MainActivity : ComponentActivity() {
         val chooseHome = {
             // Makes the home button come back to this app.
             try {
-                val rm = getSystemService(RoleManager::class.java)
-                if (rm.isRoleAvailable(RoleManager.ROLE_HOME) && !rm.isRoleHeld(RoleManager.ROLE_HOME)) {
-                    askHome.launch(rm.createRequestRoleIntent(RoleManager.ROLE_HOME))
+                if (Build.VERSION.SDK_INT >= 29) {
+                    val rm = getSystemService(RoleManager::class.java)
+                    if (rm.isRoleAvailable(RoleManager.ROLE_HOME) && !rm.isRoleHeld(RoleManager.ROLE_HOME)) {
+                        askHome.launch(rm.createRequestRoleIntent(RoleManager.ROLE_HOME))
+                    }
+                } else {
+                    startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
                 }
             } catch (_: Exception) {
                 try { startActivity(Intent(Settings.ACTION_HOME_SETTINGS)) } catch (_: Exception) {}
@@ -138,7 +149,7 @@ class MainActivity : ComponentActivity() {
                     TutorialScreen(
                         context = this,
                         onApply = applyConfig,
-                        onHome = chooseHome,
+                        onUnpin = ::unpinScreen,
                         onPin = ::pinScreen,
                         onWifi = ::openWifi,
                     ) { screen = Screen.Home }
@@ -179,6 +190,78 @@ class MainActivity : ComponentActivity() {
     }
 
     private var leftAt = 0L
+
+    // ---- Rest mode: the screen goes black and dim when nothing is happening; any touch wakes it. ----
+    private val restHandler = Handler(Looper.getMainLooper())
+    private var restCover: View? = null
+    private var resting = false
+    private var swallowTouch = false
+    private var lastActivity = SystemClock.elapsedRealtime()
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        val cover = View(this).apply {
+            setBackgroundColor(android.graphics.Color.BLACK)
+            visibility = View.GONE
+        }
+        addContentView(cover, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        restCover = cover
+    }
+
+    private fun setResting(on: Boolean) {
+        if (resting == on) return
+        resting = on
+        restCover?.visibility = if (on) View.VISIBLE else View.GONE
+        val lp = window.attributes
+        lp.screenBrightness = if (on) 0.01f else WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+        window.attributes = lp
+    }
+
+    /** Stays awake while anything is going on; rests after REST_MINUTES of nothing. */
+    private val restTick = object : Runnable {
+        override fun run() {
+            val st = Messenger.get(this@MainActivity).state.value
+            val busy = st.pending.values.sum() > 0 || st.recording || st.countdown != null ||
+                st.playingContact != null || st.notice == Notice.Sending || screen != Screen.Home
+            val now = SystemClock.elapsedRealtime()
+            if (busy) {
+                lastActivity = now
+                setResting(false)
+            } else if (now - lastActivity > REST_MINUTES * 60_000L) {
+                setResting(true)
+            }
+            restHandler.postDelayed(this, 1000)
+        }
+    }
+
+    /** The touch that wakes the screen is swallowed, so it never presses a button by accident. */
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        lastActivity = SystemClock.elapsedRealtime()
+        if (ev.actionMasked == MotionEvent.ACTION_DOWN && resting) {
+            setResting(false)
+            swallowTouch = true
+            return true
+        }
+        if (swallowTouch) {
+            if (ev.actionMasked == MotionEvent.ACTION_UP || ev.actionMasked == MotionEvent.ACTION_CANCEL) swallowTouch = false
+            return true
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lastActivity = SystemClock.elapsedRealtime()
+        setResting(false)
+        restHandler.removeCallbacks(restTick)
+        restHandler.postDelayed(restTick, 1000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        restHandler.removeCallbacks(restTick)
+        setResting(false)
+    }
 
     override fun onStop() {
         super.onStop()
@@ -275,7 +358,7 @@ private fun Home(
     ) {
         // With nobody to talk to there would be no recording and so no door: show it, or the app could never be set up.
         val nobodyYet = contacts.none { it.telegramId != null }
-        if (state.countdown != null || state.doorOpen || nobodyYet) {
+        if (state.countdown != null || state.doorOpen || nobodyYet || state.notice == Notice.Failed) {
             // Only while a reply waits to be sent (and 3 s after it is thrown away): a small door for the adult, out of the way.
             Text(
                 S.programmingDoor,

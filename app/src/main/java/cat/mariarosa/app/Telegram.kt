@@ -70,8 +70,8 @@ class TelegramClient(private val token: String) {
                 field("chat_id", chatId.toString())
                 field("duration", durationSec.toString())
                 out.write(
-                    ("--$boundary\r\nContent-Disposition: form-data; name=\"voice\"; filename=\"voice.ogg\"\r\n" +
-                        "Content-Type: audio/ogg\r\n\r\n").toByteArray(),
+                    ("--$boundary\r\nContent-Disposition: form-data; name=\"voice\"; filename=\"voice.${file.extension}\"\r\n" +
+                        "Content-Type: ${if (file.extension == "m4a") "audio/mp4" else "audio/ogg"}\r\n\r\n").toByteArray(),
                 )
                 file.inputStream().use { it.copyTo(out) }
                 out.write("\r\n--$boundary--\r\n".toByteArray())

@@ -257,12 +257,19 @@ class Messenger private constructor(context: Context, @Volatile private var conf
         }
         releasePlayer()
         stopChime()
-        val file = File(app.cacheDir, "reply_${System.currentTimeMillis()}.ogg")
+        // Ogg/Opus recording needs Android 10; on Android 9 it is AAC in .m4a, which Telegram also accepts.
+        val opus = Build.VERSION.SDK_INT >= 29
+        val file = File(app.cacheDir, "reply_${System.currentTimeMillis()}." + (if (opus) "ogg" else "m4a"))
         try {
             val r = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(app) else @Suppress("DEPRECATION") MediaRecorder()
             r.setAudioSource(MediaRecorder.AudioSource.MIC)
-            r.setOutputFormat(MediaRecorder.OutputFormat.OGG) // Ogg/Opus: what Telegram plays as a voice message
-            r.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+            if (opus) {
+                r.setOutputFormat(MediaRecorder.OutputFormat.OGG) // Ogg/Opus: what Telegram plays as a voice message
+                r.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+            } else {
+                r.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            }
             r.setAudioSamplingRate(16_000)
             r.setAudioEncodingBitRate(32_000)
             r.setOutputFile(file.absolutePath)

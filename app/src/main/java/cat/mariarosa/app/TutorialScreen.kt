@@ -51,24 +51,16 @@ internal class Words(
     val articleLabel: String, val numberLabel: String, val wrote: String, val useIt: String,
     val save: String, val saved: String,
     val pinTitle: String, val pinBody: String, val pinLabel: String, val pinNote: String,
-    val fixTitle: String, val fixIntro: String, val btnHome: String, val btnPin: String, val fixExit: String,
-    val levelsShow: String, val levelsHide: String, val fixLevels: String,
+    val fixTitle: String, val fixIntro: String, val btnPin: String, val fixExit: String,
     val doneTitle: String, val doneBody: String,
 )
 
 internal val Ca = Words(
     skip = "Salta la guia", back = "Enrere", next = "Següent", finish = "Acaba",
     welcomeTitle = "Preparem l'aparell",
-    welcomeBody = "Aquesta aplicació està pensada per a persones que tenen dificultats per fer servir un mòbil, " +
-        "i permet comunicar-se per veu amb uns pocs usuaris.\n\n" +
-        "Aquesta guia és opcional: serveix per deixar l'app a punt amb només aquest mòbil, sense ordinador. " +
-        "Els passos són: la connexió a internet, el bot de Telegram, qui hi parlarà, un PIN opcional i, si vols, fixar l'app a la pantalla. " +
-        "Pots saltar-la ara i tornar-hi des de «Programació».",
+    welcomeBody = "Aquesta app és per a persones a qui costa fer servir el mòbil: permet parlar per veu amb unes poques persones.\n\nAquesta guia ajuda un adult a deixar-ho tot a punt, només amb aquest mòbil. Els passos són: internet, el bot de Telegram, qui hi parlarà, un PIN opcional i fixar l'app. Pots saltar-la i tornar-hi des de «Programació».",
     wifiTitle = "1. Internet",
-    wifiBody = "Per començar, necessites l'ajuda d'algú per deixar-ho tot a punt. Un cop fetes aquestes pautes, després ja anirà tot sol.\n\n" +
-        "Aquest mòbil necessita internet per rebre i enviar missatges. La manera més senzilla i gratuïta és el Wi-Fi de casa. " +
-        "Si a casa no hi ha Wi-Fi, també funciona amb una targeta SIM amb dades mòbils (només cal la targeta; no cal fer-la servir per trucar). " +
-        "Sense cap de les dues, no rebrà ni enviarà res. Comprova que estigui connectat, o connecta'l ara.",
+    wifiBody = "Aquest mòbil necessita internet per rebre i enviar missatges. El més senzill és el Wi-Fi de casa; si no n'hi ha, també va amb una targeta SIM amb dades (no cal per trucar). Sense internet no funciona. Comprova que estigui connectat o connecta'l ara.",
     wifiOn = "Connectat a internet ✔", wifiOff = "Encara no està connectat a internet", wifiBtn = "Obre els ajustos de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necessites tenir instal·lada l'aplicació Telegram en algun mòbil per poder preparar això. " +
@@ -84,45 +76,28 @@ internal val Ca = Words(
     paste = "Enganxa", checking = "Comprovant…",
     tokenBad = "No funciona: comprova que hagis enganxat el codi sencer i que hi hagi internet.",
     contactTitle = "3. Qui hi parlarà",
-    contactSteps = "Aquesta persona ha d'obrir Telegram, buscar %s, tocar Start i escriure «hola». " +
-        "Quan ho faci, el seu nom i número apareixeran aquí sols. També pots escriure'ls a mà.",
+    contactSteps = "Aquesta persona ha d'obrir Telegram, buscar %s, tocar Start i escriure qualsevol missatge. Quan ho faci, aquí sortirà un requadre groc: toca «Fes-lo servir» i desa el contacte.",
     botRef = "el bot que has creat",
     haveContacts = "En aquest mòbil ja hi tens aquests contactes: %s. Si no en vols afegir cap més, no posis res i ves al pas següent.",
     nameLabel = "Nom (surt al botó)", articleLabel = "Article davant del nom", numberLabel = "Número de Telegram",
     wrote = "Ha escrit: %s (%s)", useIt = "Fes-lo servir", save = "Desa aquest contacte", saved = "Contacte desat ✔",
     pinTitle = "4. Protegir Programació",
-    pinBody = "«Programació» és la pantalla on es canvia la configuració de l'app (contactes, so…). Només ho ha de fer un adult. Si vols que ningú més hi pugui entrar (per exemple, els nets), posa-hi un PIN de 4 xifres: el demanarà cada cop que algú intenti obrir Programació. No és el codi per desbloquejar el mòbil. És opcional.",
+    pinBody = "«Programació» és on es canvia la configuració. Només ho ha de fer un adult. Si vols que ningú més hi entri (per exemple, els nets), posa-hi un PIN de 4 xifres. No és el codi per desbloquejar el mòbil. És opcional.",
     pinLabel = "PIN (4 xifres; buit = sense PIN)",
-    pinNote = "Apunta'l en un lloc segur: si s'oblida, l'única manera de treure'l és reinstal·lar l'app, i es perd la configuració.",
+    pinNote = "Apunta'l: si s'oblida, només es pot treure reinstal·lant l'app.",
     fixTitle = "5. Fixar l'app",
-    fixIntro = "Per facilitar l'ús de l'app a persones a qui costa fer servir els mòbils, proposem fer servir aquest mòbil exclusivament per a aquesta aplicació. " +
-        "Amb aquests dos botons ho pots fer de dues maneres: fixar l'app a la pantalla, i fer que el botó d'inici torni sempre a l'app. " +
-        "A sota te'n proposem dues més, més segures, que has de fer tu mateix canviant paràmetres del mòbil. Tot és opcional.",
-    btnHome = "Que el botó d'inici torni a l'app", btnPin = "Fixa l'app a la pantalla",
-    fixExit = "Per sortir d'una fixació: «Programació» → «Deixa de fixar». També se'n pot sortir mantenint premuts Enrere i Recents " +
-        "(el gest pot variar segons el mòbil). Després d'un reinici s'ha de tornar a fixar. Va bé contra tocs sense voler, no contra algú que ho sàpiga.",
-    levelsShow = "Dues maneres més segures (avançat)", levelsHide = "Amaga-ho",
-    fixLevels = "A. Bloqueig de pantalla amb PIN. Fixa l'app, posa un bloqueig de pantalla amb PIN i, als ajustos d'Android, " +
-        "activa que demani el PIN abans de deixar de fixar (el nom de l'opció varia). Compte: amb bloqueig de pantalla, en despertar el mòbil " +
-        "pot demanar el PIN abans de mostrar l'app. No s'ha provat amb aquesta app.\n\n" +
-        "B. Mode quiosc (l'app com a administradora del mòbil). No se'n pot sortir sense l'adult i sobreviu als reinicis. " +
-        "Cal un mòbil restaurat de fàbrica, sense cap compte, i fer-ho un cop des d'un ordinador. Aquesta versió de l'app encara no ho porta incorporat.",
+    fixIntro = "Fixar l'app fa que el mòbil només serveixi per a aquesta app, perquè no se'n pugui sortir per error. Android et demanarà que ho confirmis. És opcional.",
+    btnPin = "Fixa l'app a la pantalla",
+    fixExit = "Per sortir-ne: «Deixa de fixar» o mantén premuts Enrere i Recents. Després d'un reinici cal tornar-la a fixar.",
     doneTitle = "Tot a punt", doneBody = "Ja pots tancar la guia. Tot es pot canviar més endavant des de «Programació».",
 )
 
 private val Es = Words(
     skip = "Saltar la guía", back = "Atrás", next = "Siguiente", finish = "Terminar",
     welcomeTitle = "Preparamos el aparato",
-    welcomeBody = "Esta aplicación está pensada para personas con dificultades para usar un móvil, " +
-        "y permite comunicarse por voz con unos pocos usuarios.\n\n" +
-        "Esta guía es opcional: sirve para dejar la app lista solo con este móvil, sin ordenador. " +
-        "Los pasos son: la conexión a internet, el bot de Telegram, quién hablará, un PIN opcional y, si quieres, fijar la app en la pantalla. " +
-        "Puedes saltarla ahora y volver desde «Programación».",
+    welcomeBody = "Esta app es para personas a quienes les cuesta usar el móvil: permite hablar por voz con unas pocas personas.\n\nEsta guía ayuda a un adulto a dejarlo todo listo, solo con este móvil. Los pasos son: internet, el bot de Telegram, quién hablará, un PIN opcional y fijar la app. Puedes saltarla y volver desde «Programación».",
     wifiTitle = "1. Internet",
-    wifiBody = "Para empezar, necesitas la ayuda de alguien para dejarlo todo listo. Una vez hechas estas pautas, después todo irá solo.\n\n" +
-        "Este móvil necesita internet para recibir y enviar mensajes. La forma más sencilla y gratuita es el Wi-Fi de casa. " +
-        "Si en casa no hay Wi-Fi, también funciona con una tarjeta SIM con datos móviles (solo hace falta la tarjeta; no hace falta usarla para llamar). " +
-        "Sin ninguna de las dos, no recibirá ni enviará nada. Comprueba que esté conectado, o conéctalo ahora.",
+    wifiBody = "Este móvil necesita internet para recibir y enviar mensajes. Lo más sencillo es el Wi-Fi de casa; si no hay, también funciona con una tarjeta SIM con datos (no hace falta para llamar). Sin internet no funciona. Comprueba que esté conectado o conéctalo ahora.",
     wifiOn = "Conectado a internet ✔", wifiOff = "Aún no está conectado a internet", wifiBtn = "Abrir los ajustes de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necesitas tener instalada la aplicación Telegram en algún móvil para poder preparar esto. " +
@@ -138,45 +113,28 @@ private val Es = Words(
     paste = "Pegar", checking = "Comprobando…",
     tokenBad = "No funciona: comprueba que hayas pegado el código entero y que haya internet.",
     contactTitle = "3. Quién hablará",
-    contactSteps = "Esa persona debe abrir Telegram, buscar %s, tocar Start y escribir «hola». " +
-        "Cuando lo haga, su nombre y número aparecerán aquí solos. También puedes escribirlos a mano.",
+    contactSteps = "Esa persona debe abrir Telegram, buscar %s, tocar Start y escribir cualquier mensaje. Cuando lo haga, aquí saldrá un recuadro amarillo: toca «Usar» y guarda el contacto.",
     botRef = "el bot que has creado",
     haveContacts = "En este móvil ya tienes estos contactos: %s. Si no quieres añadir ninguno más, no pongas nada y ve al paso siguiente.",
     nameLabel = "Nombre (sale en el botón)", articleLabel = "Artículo delante del nombre", numberLabel = "Número de Telegram",
     wrote = "Ha escrito: %s (%s)", useIt = "Usar", save = "Guardar este contacto", saved = "Contacto guardado ✔",
     pinTitle = "4. Proteger Programación",
-    pinBody = "«Programación» es la pantalla donde se cambia la configuración de la app (contactos, sonido…). Solo debe hacerlo un adulto. Si quieres que nadie más pueda entrar (por ejemplo, los nietos), pon un PIN de 4 cifras: lo pedirá cada vez que alguien intente abrir Programación. No es el código para desbloquear el móvil. Es opcional.",
+    pinBody = "«Programación» es donde se cambia la configuración. Solo debe hacerlo un adulto. Si quieres que nadie más entre (por ejemplo, los nietos), pon un PIN de 4 cifras. No es el código para desbloquear el móvil. Es opcional.",
     pinLabel = "PIN (4 cifras; vacío = sin PIN)",
-    pinNote = "Anótalo en un lugar seguro: si se olvida, la única forma de quitarlo es reinstalar la app, y se pierde la configuración.",
+    pinNote = "Anótalo: si se olvida, solo se puede quitar reinstalando la app.",
     fixTitle = "5. Fijar la app",
-    fixIntro = "Para facilitar el uso de la app a personas a quienes les cuesta usar el móvil, proponemos usar este móvil exclusivamente para esta aplicación. " +
-        "Con estos dos botones puedes hacerlo de dos maneras: fijar la app en la pantalla, y hacer que el botón de inicio vuelva siempre a la app. " +
-        "Más abajo te proponemos dos más, más seguras, que debes hacer tú mismo cambiando parámetros del móvil. Todo es opcional.",
-    btnHome = "Que el botón de inicio vuelva a la app", btnPin = "Fijar la app en la pantalla",
-    fixExit = "Para salir de una fijación: «Programación» → «Dejar de fijar». También se puede salir manteniendo pulsados Atrás y Recientes " +
-        "(el gesto puede variar según el móvil). Tras un reinicio hay que volver a fijarla. Sirve contra toques sin querer, no contra alguien que lo sepa.",
-    levelsShow = "Dos maneras más seguras (avanzado)", levelsHide = "Ocultar",
-    fixLevels = "A. Bloqueo de pantalla con PIN. Fija la app, pon un bloqueo de pantalla con PIN y, en los ajustes de Android, " +
-        "activa que pida el PIN antes de dejar de fijar (el nombre de la opción varía). Ojo: con bloqueo de pantalla, al despertar el móvil " +
-        "puede pedir el PIN antes de mostrar la app. No se ha probado con esta app.\n\n" +
-        "B. Modo quiosco (la app como administradora del móvil). No se puede salir sin el adulto y sobrevive a los reinicios. " +
-        "Requiere un móvil restaurado de fábrica, sin ninguna cuenta, y hacerlo una vez desde un ordenador. Esta versión de la app aún no lo incluye.",
+    fixIntro = "Fijar la app hace que el móvil solo sirva para esta app, para que no se pueda salir por error. Android te pedirá que lo confirmes. Es opcional.",
+    btnPin = "Fijar la app en la pantalla",
+    fixExit = "Para salir: «Dejar de fijar» o mantén pulsados Atrás y Recientes. Tras un reinicio hay que volver a fijarla.",
     doneTitle = "Todo listo", doneBody = "Ya puedes cerrar la guía. Todo se puede cambiar después desde «Programación».",
 )
 
 private val En = Words(
     skip = "Skip the guide", back = "Back", next = "Next", finish = "Finish",
     welcomeTitle = "Let's set up the phone",
-    welcomeBody = "This app is meant for people who have difficulty using a phone, " +
-        "and lets them communicate by voice with a few people.\n\n" +
-        "This guide is optional: it gets the app ready using only this phone, no computer. " +
-        "The steps are: the internet connection, the Telegram bot, who will be talking, an optional PIN and, if you wish, pinning the app to the screen. " +
-        "You can skip it now and come back from \"Programming\".",
+    welcomeBody = "This app is for people who find phones hard to use: it lets them talk by voice with a few people.\n\nThis guide helps an adult get everything ready, using only this phone. The steps are: internet, the Telegram bot, who will talk, an optional PIN and pinning the app. You can skip it and come back from \"Programming\".",
     wifiTitle = "1. Internet",
-    wifiBody = "To begin with, you need someone's help to get everything ready. Once these steps are done, everything will run by itself.\n\n" +
-        "This phone needs internet to receive and send messages. The simplest, free way is the home Wi-Fi. " +
-        "If there is no Wi-Fi at home, it also works with a SIM card with mobile data (only the card is needed; it does not have to be used for calls). " +
-        "With neither, it will not receive or send anything. Check that it is connected, or connect it now.",
+    wifiBody = "This phone needs internet to receive and send messages. The easiest way is home Wi-Fi; if there is none, a SIM card with mobile data also works (it does not need to be used for calls). Without internet it does not work. Check that it is connected, or connect it now.",
     wifiOn = "Connected to the internet ✔", wifiOff = "Not connected to the internet yet", wifiBtn = "Open Wi-Fi settings",
     botTitle = "2. The Telegram bot",
     botSteps = "You need the Telegram app installed on some phone to be able to set this up. " +
@@ -192,45 +150,28 @@ private val En = Words(
     paste = "Paste", checking = "Checking…",
     tokenBad = "It does not work: check that you pasted the whole code and that there is internet.",
     contactTitle = "3. Who will talk",
-    contactSteps = "That person must open Telegram, search for %s, tap Start and write \"hello\". " +
-        "Their name and number will then appear here by themselves. You can also type them in.",
+    contactSteps = "That person must open Telegram, search for %s, tap Start and write any message. When they do, a yellow box will appear here: tap \"Use it\" and save the contact.",
     botRef = "the bot you created",
     haveContacts = "This phone already has these contacts: %s. If you do not want to add any more, put nothing and go to the next step.",
     nameLabel = "Name (shown on the button)", articleLabel = "Article before the name", numberLabel = "Telegram number",
     wrote = "Wrote: %s (%s)", useIt = "Use it", save = "Save this contact", saved = "Contact saved ✔",
     pinTitle = "4. Protect Programming",
-    pinBody = "\"Programming\" is the screen where the app's settings are changed (contacts, sound…). Only an adult should do it. If you want nobody else to get in (for example, the grandchildren), set a 4-digit PIN: it will be asked every time someone tries to open Programming. It is not the code that unlocks the phone. It is optional.",
+    pinBody = "\"Programming\" is where the settings are changed. Only an adult should do it. If you want nobody else to get in (for example, the grandchildren), set a 4-digit PIN. It is not the code that unlocks the phone. It is optional.",
     pinLabel = "PIN (4 digits; empty = no PIN)",
-    pinNote = "Write it down somewhere safe: if forgotten, the only way to remove it is to reinstall the app, and the settings are lost.",
+    pinNote = "Write it down: if forgotten, it can only be removed by reinstalling the app.",
     fixTitle = "5. Pin the app",
-    fixIntro = "To make the app easier for people who find phones hard to use, we suggest using this phone only for this app. " +
-        "With these two buttons you can do it in two ways: pin the app to the screen, and make the home button always return to the app. " +
-        "Below we suggest two more, more secure, that you have to do yourself by changing the phone's settings. All of it is optional.",
-    btnHome = "Make the home button return to the app", btnPin = "Pin the app to the screen",
-    fixExit = "To leave a pinned screen: \"Programming\" → \"Stop pinning\". It can also be left by holding Back and Recents " +
-        "(the gesture may differ by phone). After a restart it must be pinned again. Good against accidental touches, not against someone who knows how.",
-    levelsShow = "Two more secure ways (advanced)", levelsHide = "Hide",
-    fixLevels = "A. Screen lock with a PIN. Pin the app, set a screen lock with a PIN and, in Android's settings, " +
-        "turn on asking for the PIN before unpinning (the option's name varies). Careful: with a screen lock, waking the phone " +
-        "may ask for the PIN before showing the app. Not tested with this app.\n\n" +
-        "B. Kiosk mode (the app as the phone's administrator). It cannot be left without the adult and survives restarts. " +
-        "It needs a factory-reset phone with no accounts, and doing it once from a computer. This version of the app does not include it yet.",
+    fixIntro = "Pinning the app makes the phone usable only for this app, so nobody leaves it by mistake. Android will ask you to confirm. It is optional.",
+    btnPin = "Pin the app to the screen",
+    fixExit = "To leave: \"Stop pinning\", or hold Back and Recents. After a restart it must be pinned again.",
     doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\".",
 )
 
 private val Fr = Words(
     skip = "Passer le guide", back = "Retour", next = "Suivant", finish = "Terminer",
     welcomeTitle = "Préparons l'appareil",
-    welcomeBody = "Cette application est conçue pour les personnes qui ont du mal à utiliser un téléphone portable, " +
-        "et leur permet de communiquer par la voix avec quelques personnes.\n\n" +
-        "Ce guide est facultatif : il permet de préparer l'application avec ce seul téléphone, sans ordinateur. " +
-        "Les étapes sont : la connexion internet, le bot Telegram, qui parlera, un PIN facultatif et, si vous le souhaitez, épingler l'application à l'écran. " +
-        "Vous pouvez le passer maintenant et y revenir depuis « Programmation ».",
+    welcomeBody = "Cette application est pour les personnes qui ont du mal à utiliser un téléphone : elle permet de parler par la voix avec quelques personnes.\n\nCe guide aide un adulte à tout préparer, avec ce seul téléphone. Les étapes : internet, le bot Telegram, qui parlera, un code PIN facultatif et l'épinglage de l'application. Vous pouvez l'ignorer et y revenir depuis « Programmation ».",
     wifiTitle = "1. Internet",
-    wifiBody = "Pour commencer, vous avez besoin de l'aide de quelqu'un pour tout préparer. Une fois ces étapes faites, tout se fera ensuite tout seul.\n\n" +
-        "Ce téléphone a besoin d'internet pour recevoir et envoyer des messages. Le plus simple et gratuit est le Wi-Fi de la maison. " +
-        "S'il n'y a pas de Wi-Fi à la maison, il fonctionne aussi avec une carte SIM avec données mobiles (seule la carte est nécessaire ; inutile de s'en servir pour téléphoner). " +
-        "Sans aucun des deux, il ne recevra ni n'enverra rien. Vérifiez qu'il est connecté, ou connectez-le maintenant.",
+    wifiBody = "Ce téléphone a besoin d'internet pour recevoir et envoyer des messages. Le plus simple est le Wi-Fi de la maison ; s'il n'y en a pas, une carte SIM avec données mobiles fonctionne aussi (inutile pour téléphoner). Sans internet, rien ne marche. Vérifiez qu'il est connecté, ou connectez-le maintenant.",
     wifiOn = "Connecté à internet ✔", wifiOff = "Pas encore connecté à internet", wifiBtn = "Ouvrir les réglages Wi-Fi",
     botTitle = "2. Le bot Telegram",
     botSteps = "Il vous faut l'application Telegram installée sur un téléphone pour pouvoir préparer cela. " +
@@ -246,29 +187,19 @@ private val Fr = Words(
     paste = "Coller", checking = "Vérification…",
     tokenBad = "Cela ne fonctionne pas : vérifiez que vous avez collé le code en entier et qu'il y a internet.",
     contactTitle = "3. Qui parlera",
-    contactSteps = "Cette personne doit ouvrir Telegram, chercher %s, toucher Start et écrire « bonjour ». " +
-        "Dès qu'elle l'aura fait, son nom et son numéro apparaîtront ici tout seuls. Vous pouvez aussi les saisir à la main.",
+    contactSteps = "Cette personne doit ouvrir Telegram, chercher %s, toucher Start et écrire n'importe quel message. Dès qu'elle l'aura fait, un encadré jaune apparaîtra ici : touchez « Utiliser » et enregistrez le contact.",
     botRef = "le bot que vous avez créé",
     haveContacts = "Ce téléphone a déjà ces contacts : %s. Si vous ne voulez pas en ajouter d'autres, ne saisissez rien et passez à l'étape suivante.",
     nameLabel = "Nom (affiché sur le bouton)", articleLabel = "Article devant le nom", numberLabel = "Numéro Telegram",
     wrote = "A écrit : %s (%s)", useIt = "Utiliser", save = "Enregistrer ce contact", saved = "Contact enregistré ✔",
     pinTitle = "4. Protéger Programmation",
-    pinBody = "« Programmation » est l'écran où l'on modifie les réglages de l'application (contacts, son…). Seul un adulte doit le faire. Si vous voulez que personne d'autre n'y accède (par exemple les petits-enfants), mettez un code PIN à 4 chiffres : il sera demandé chaque fois que quelqu'un essaiera d'ouvrir Programmation. Ce n'est pas le code de déverrouillage du téléphone. C'est facultatif.",
+    pinBody = "« Programmation » est l'endroit où l'on change les réglages. Seul un adulte doit le faire. Si vous voulez que personne d'autre n'y accède (par exemple les petits-enfants), mettez un code PIN à 4 chiffres. Ce n'est pas le code de déverrouillage du téléphone. C'est facultatif.",
     pinLabel = "PIN (4 chiffres ; vide = sans PIN)",
-    pinNote = "Notez-le en lieu sûr : en cas d'oubli, le seul moyen de l'enlever est de réinstaller l'application, et les réglages sont perdus.",
+    pinNote = "Notez-le : en cas d'oubli, on ne peut l'enlever qu'en réinstallant l'application.",
     fixTitle = "5. Épingler l'application",
-    fixIntro = "Pour faciliter l'usage de l'application aux personnes qui ont du mal avec les téléphones, nous proposons d'utiliser ce téléphone uniquement pour cette application. " +
-        "Avec ces deux boutons, vous pouvez le faire de deux façons : épingler l'application à l'écran, et faire que le bouton d'accueil revienne toujours à l'application. " +
-        "Plus bas, nous vous en proposons deux autres, plus sûres, que vous devez faire vous-même en modifiant des paramètres du téléphone. Tout est facultatif.",
-    btnHome = "Que le bouton d'accueil revienne à l'application", btnPin = "Épingler l'application à l'écran",
-    fixExit = "Pour quitter un écran épinglé : « Programmation » → « Ne plus épingler ». On peut aussi en sortir en maintenant Retour et Récents " +
-        "(le geste peut varier selon le téléphone). Après un redémarrage, il faut l'épingler de nouveau. Utile contre les touches involontaires, pas contre quelqu'un qui sait faire.",
-    levelsShow = "Deux façons plus sûres (avancé)", levelsHide = "Masquer",
-    fixLevels = "A. Verrouillage d'écran avec PIN. Épinglez l'application, mettez un verrouillage d'écran avec PIN et, dans les réglages d'Android, " +
-        "activez la demande du PIN avant de désépingler (le nom de l'option varie). Attention : avec un verrouillage d'écran, le réveil du téléphone " +
-        "peut demander le PIN avant d'afficher l'application. Non testé avec cette application.\n\n" +
-        "B. Mode kiosque (l'application comme administratrice du téléphone). On ne peut pas en sortir sans l'adulte et il survit aux redémarrages. " +
-        "Il faut un téléphone réinitialisé, sans aucun compte, et le faire une fois depuis un ordinateur. Cette version de l'application ne l'inclut pas encore.",
+    fixIntro = "Épingler l'application fait que le téléphone ne sert qu'à elle, pour qu'on n'en sorte pas par erreur. Android vous demandera de confirmer. C'est facultatif.",
+    btnPin = "Épingler l'application à l'écran",
+    fixExit = "Pour en sortir : « Ne plus épingler », ou maintenez Retour et Récents. Après un redémarrage, il faut l'épingler de nouveau.",
     doneTitle = "Tout est prêt", doneBody = "Vous pouvez fermer le guide. Tout peut être modifié plus tard depuis « Programmation ».",
 )
 
@@ -286,7 +217,7 @@ internal fun wordsFor(lang: String) = when (lang) { "es" -> Es; "en" -> En; "fr"
 fun TutorialScreen(
     context: Context,
     onApply: () -> Unit,
-    onHome: () -> Unit,
+    onUnpin: () -> Unit,
     onPin: () -> Unit,
     onWifi: () -> Unit,
     onClose: () -> Unit,
@@ -308,14 +239,6 @@ fun TutorialScreen(
     var article by remember { mutableStateOf("") }
     var number by remember { mutableStateOf("") }
     var saved by remember { mutableStateOf(false) }
-    var showLevels by remember { mutableStateOf(false) }
-    // Opening the text must be visible: the screen scrolls down to show it.
-    LaunchedEffect(showLevels) {
-        if (showLevels) {
-            delay(150)
-            scroll.animateScrollTo(scroll.maxValue)
-        }
-    }
     var wifi by remember { mutableStateOf(internetConnected(context)) }
     var pin by remember { mutableStateOf(prefs.pin) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
@@ -345,9 +268,16 @@ fun TutorialScreen(
         modifier = Modifier.fillMaxSize().background(Color.White).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Lang.all.forEach { (code, label) ->
-                FilterChip(selected = Lang.current == code, onClick = { Lang.set(context, code) }, label = { Text(label) })
+        Lang.all.chunked(2).forEach { pair ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                pair.forEach { (code, label) ->
+                    FilterChip(
+                        selected = Lang.current == code,
+                        onClick = { Lang.set(context, code) },
+                        label = { Text(label, fontSize = 17.sp) },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
         if (S.autoTranslation.isNotEmpty()) Text(S.autoTranslation, fontSize = 14.sp, color = Color.DarkGray)
@@ -455,17 +385,9 @@ fun TutorialScreen(
                 5 -> {
                     Text(w.fixTitle, fontSize = 30.sp, color = Color.Black)
                     Text(w.fixIntro, fontSize = 19.sp, color = Color.DarkGray)
-                    OutlinedButton(onClick = onHome) { Text(w.btnHome) }
-                    OutlinedButton(onClick = onPin) { Text(w.btnPin) }
+                    OutlinedButton(onClick = onPin, modifier = Modifier.fillMaxWidth()) { Text(w.btnPin) }
+                    OutlinedButton(onClick = onUnpin, modifier = Modifier.fillMaxWidth()) { Text(S.unpin) }
                     Text(w.fixExit, fontSize = 17.sp, color = Color.DarkGray)
-                    OutlinedButton(onClick = { showLevels = !showLevels }, modifier = Modifier.fillMaxWidth()) {
-                        Text(if (showLevels) "▲ ${w.levelsHide}" else "▼ ${w.levelsShow}")
-                    }
-                    if (showLevels) {
-                        Column(
-                            Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Color(0xFFE8EAF6)).padding(14.dp),
-                        ) { Text(w.fixLevels, fontSize = 17.sp, color = Color.DarkGray) }
-                    }
                 }
                 else -> {
                     Text(w.doneTitle, fontSize = 30.sp, color = Color.Black)

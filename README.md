@@ -8,7 +8,8 @@ Funciona a través d'un **bot de Telegram**. La persona que escriu (un familiar 
 fa servir el Telegram de sempre; l'aparell de l'altra banda mostra la nota com un botó que
 s'escolta amb un toc.
 
-> Estat: fases 1 i 2 funcionen i s'han provat en un Xiaomi Redmi Note 15 (Android 16).
+> Estat: fases 1 i 2 funcionen i s'han provat en un Xiaomi Redmi Note 15 (Android 16) i en un
+> Honor 9 Lite (Android 9, EMUI 9.1), que és l'aparell definitiu. Android mínim: 9 (API 28).
 > Encara **no** hi ha mode quiosc ni ús continuat en un entorn real. Vegeu `docs/FASES.md`.
 
 ---
@@ -44,12 +45,18 @@ s'escolta amb un toc.
   castellà, anglès i francès. Segueix l'idioma del mòbil, o el que es triï a la guia o a Programació. Totes les frases són a
   `Strings.kt`, les quatre llengües una al costat de l'altra. **El castellà, l'anglès i el francès són traduccions automàtiques
   i no les ha revisat cap persona**; l'app ho diu a pantalla quan se'n tria una. Els articles («la Maria») només existeixen en català.
-- **Fixar l'app:** botó «Fixa l'app» (pantalla fixada d'Android: Android demana confirmació i s'inhabiliten inici i recents)
-  i «Que el botó d'inici torni a l'app» (l'app com a pantalla d'inici). Per sortir: «Deixa de fixar» a Programació.
-  No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent.
-  La guia explica tres nivells: (1) fixar l'app, (2) fixar + bloqueig de pantalla amb PIN que es demana per desfixar
-  (no provat amb aquesta app: en despertar pot demanar el PIN abans de veure-la), (3) mode quiosc, que cal fer un cop
-  des d'un ordinador en un mòbil restaurat de fàbrica i sense comptes, i que encara no està programat.
+- **Fixar l'app:** botons «Fixa l'app a la pantalla» i «Deixa de fixar», a Programació i al pas 5 de la guia (pantalla fixada
+  d'Android: demana confirmació i s'inhabiliten inici i recents). També se'n surt mantenint premuts Enrere i Recents.
+  No és un bloqueig total ni sobreviu a un reinici; el bloqueig complet és el mode quiosc, encara pendent
+  (cal un mòbil restaurat de fàbrica, sense comptes, i fer-ho un cop des d'un ordinador).
+- **Programació, simplificada:** només surt el que cal. Els botons del micròfon i de la bateria només apareixen si el permís falta;
+  els contactes s'afegeixen només quan la persona escriu al bot (requadre groc); esborrar un contacte demana confirmació.
+- **Pantalla en descans:** amb res a fer durant 10 minuts (constant `REST_MINUTES` a `MainActivity.kt`) la pantalla es posa negra i
+  amb la lluentor al mínim; **qualsevol toc** la desperta (aquest primer toc no prem cap botó). No s'apaga mai amb un missatge
+  per escoltar, gravant, reproduint, en compte enrere ni amb Programació o la guia obertes. No és una pantalla apagada de debò
+  (el toc no pot despertar una pantalla apagada des d'una app); en un LCD la llum de fons queda al mínim.
+- **Android 9:** l'Ogg/Opus només es pot gravar des d'Android 10; amb Android 9 es grava en AAC (`.m4a`), que Telegram també accepta
+  com a nota de veu (comprovat que arriba com a nota de veu).
 - Si no hi ha internet, ho diu a la pantalla: «Sense connexió a internet».
 - Es manté en marxa amb la pantalla apagada (servei en primer pla) i **arrenca sola** quan es reinicia el mòbil.
 
@@ -151,16 +158,10 @@ Perquè `adb` el vegi: opcions de desenvolupador → **Depuració per USB**, i a
 
 ## Pendent
 
-- **Pantalla apagada per defecte** (es decidirà i es provarà amb el mòbil definitiu): es desperta **només amb el botó lateral**
-  (el toc depèn d'un ajust del sistema); amb un missatge nou s'encén i **no s'apaga fins que s'escolta**; després queda
-  **10 minuts** encesa (`screenOnMinutes` a `config.json`) i es torna a apagar. Cal que el mòbil no tingui bloqueig de pantalla.
-  Sense mode quiosc, l'apagat és el temps d'espera del sistema més els 10 minuts, no exacte.
-  Risc: un missatge que ningú escolta deixa la pantalla encesa tota la nit.
 - **Token del bot al mòbil:** ja es pot canviar des de la guia sense recompilar; cada mòbil ha de tenir el seu bot
   (Telegram no deixa que dos aparells llegeixin el mateix bot alhora). El token de l'APK és només el del bot de proves.
 - **Mode quiosc:** app administradora del dispositiu, amb sortida oculta només per a adults (p. ex. cinc tocs i un PIN)
   per arribar als ajustos de Wi-Fi. Cal un aparell que es pugui restaurar de fàbrica, sense comptes.
-- Pantalla que baixi la brillantor o s'apagui de nit (evita marcar-la i gastar bateria).
 - Icona retocada, i fases 3–5 (fotos i text llegit en veu alta, més contactes, pregunta a la IA).
 
 ## Publicació a Google Play

@@ -54,7 +54,7 @@ private class Draft(
     var telegramId by mutableStateOf(telegramId)
     var active by mutableStateOf(active)
 
-    fun toContact() = Contact(id, name.trim(), active, telegramId.trim().toLongOrNull(), article)
+    fun toContact() = Contact(id, name.trim(), true, telegramId.trim().toLongOrNull(), article)
 }
 
 private val Grey = Color(0xFF424242)
@@ -112,15 +112,10 @@ fun SettingsScreen(
     var botChecked by remember { mutableStateOf(false) }
     var stranger by remember { mutableStateOf(prefs.stranger) }
     var wifi by remember { mutableStateOf(internetConnected(context)) }
-    var showLevels by remember { mutableStateOf(false) }
+    var toRemove by remember { mutableStateOf<Int?>(null) }
+    var micOk by remember { mutableStateOf(true) }
+    var batteryOk by remember { mutableStateOf(true) }
     val scroll = rememberScrollState()
-    // Opening the text must be visible: the screen scrolls down to show it.
-    LaunchedEffect(showLevels) {
-        if (showLevels) {
-            delay(150)
-            scroll.animateScrollTo(scroll.maxValue)
-        }
-    }
 
     LaunchedEffect(Unit) {
         botName = withContext(Dispatchers.IO) {
@@ -132,6 +127,9 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         while (true) {
             wifi = internetConnected(context)
+            micOk = context.checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            batteryOk = (context.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager)
+                .isIgnoringBatteryOptimizations(context.packageName)
             stranger = prefs.stranger
             delay(2_000)
         }
@@ -152,9 +150,16 @@ fun SettingsScreen(
             Body(S.settingsIntro)
             Big(S.openGuide, primary = true, onClick = onTutorial)
             Heading(S.languageTitle)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Lang.all.forEach { (code, label) ->
-                    FilterChip(selected = Lang.current == code, onClick = { Lang.set(context, code) }, label = { Text(label, fontSize = 16.sp) })
+            Lang.all.chunked(2).forEach { pair ->
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                    pair.forEach { (code, label) ->
+                        FilterChip(
+                            selected = Lang.current == code,
+                            onClick = { Lang.set(context, code) },
+                            label = { Text(label, fontSize = 20.sp) },
+                            modifier = Modifier.weight(1f).heightIn(min = 52.dp),
+                        )
+                    }
                 }
             }
             if (S.autoTranslation.isNotEmpty()) Body(S.autoTranslation)
@@ -208,26 +213,11 @@ fun SettingsScreen(
                         }
                     }
                     Body(S.willShow(d.toContact()))
-                    OutlinedTextField(
-                        value = d.telegramId, onValueChange = { d.telegramId = it.filter(Char::isDigit) },
-                        label = { Text(S.telegramNumber) }, singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-                        Switch(checked = d.active, onCheckedChange = { d.active = it })
-                        Body(if (d.active) S.visible else S.hidden, color = Color.Black)
-                    }
-                    Big(S.removeContact) { drafts.removeAt(i) }
+                    Body("${S.telegramNumber}: ${d.telegramId.ifEmpty { "—" }}")
+                    Big(S.removeContact) { toRemove = i }
                 }
             }
-            if (drafts.size < MAX_CONTACTS) {
-                Big(S.addManual) {
-                    drafts.add(Draft("c${System.currentTimeMillis()}", "", "", "", true))
-                }
-            } else {
-                Body(S.maxContacts)
-            }
+            if (drafts.size >= MAX_CONTACTS) Body(S.maxContacts)
 
             // ---- Sound ----
             Heading(S.soundTitle)
@@ -253,15 +243,14 @@ fun SettingsScreen(
             Body(S.fixSettingsIntro)
             Big(w.btnPin, onClick = onPin)
             Big(S.unpin, onClick = onUnpin)
-            Big(w.btnHome, onClick = onHome)
-            Body(S.exitShort)
-            Big(if (showLevels) "▲ ${w.levelsHide}" else "▼ ${w.levelsShow}") { showLevels = !showLevels }
-            if (showLevels) Card(background = Color(0xFFE8EAF6)) { Body(w.fixLevels) }
 
-            Heading(S.batteryTitle)
-            Body(S.batteryBody)
-            Big(S.batteryBtn, onClick = onBattery)
-            Big(S.micBtn, onClick = onMic)
+            // Only shown when something is missing: otherwise there is nothing to do.
+            if (!batteryOk) {
+                Heading(S.batteryTitle)
+                Body(S.batteryBody)
+                Big(S.batteryBtn, onClick = onBattery)
+            }
+            if (!micOk) Big(S.micBtn, onClick = onMic)
 
             Big(S.saveBack, primary = true, enabled = !pinBad) {
                 prefs.saveContacts(drafts.map { it.toContact() }.filter { it.name.isNotEmpty() })
@@ -269,6 +258,21 @@ fun SettingsScreen(
                 onDone()
             }
             Big(S.backNoSave, onClick = onDone)
+        }
+        toRemove?.let { idx ->
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { toRemove = null },
+                text = { Text(S.removeAsk, fontSize = 22.sp) },
+                confirmButton = {
+                    androidx.compose.material3.TextButton(onClick = {
+                        if (idx in drafts.indices) drafts.removeAt(idx)
+                        toRemove = null
+                    }) { Text(S.removeYes, fontSize = 20.sp) }
+                },
+                dismissButton = {
+                    androidx.compose.material3.TextButton(onClick = { toRemove = null }) { Text(S.removeNo, fontSize = 20.sp) }
+                },
+            )
         }
     }
 }
