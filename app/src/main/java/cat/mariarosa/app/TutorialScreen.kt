@@ -61,7 +61,7 @@ internal val Ca = Words(
     welcomeBody = "Aquesta app és per a persones a qui costa fer servir el mòbil: permet parlar per veu amb unes poques persones.\n\nAquesta guia ajuda un adult a deixar-ho tot a punt, només amb aquest mòbil. Els passos són: internet, el bot de Telegram, qui hi parlarà, un PIN opcional i fixar l'app. Pots saltar-la i tornar-hi des de «Programació».",
     wifiTitle = "1. Internet",
     wifiBody = "Aquest mòbil necessita internet per rebre i enviar missatges. El més senzill és el Wi-Fi de casa; si no n'hi ha, també va amb una targeta SIM amb dades (no cal per trucar). Sense internet no funciona. Comprova que estigui connectat o connecta'l ara.",
-    wifiOn = "Connectat a internet ✔", wifiOff = "Encara no està connectat a internet", wifiBtn = "Obre els ajustos de Wi-Fi",
+    wifiOn = "Connectat a internet ✔ Toca «Següent».", wifiOff = "Encara no està connectat a internet", wifiBtn = "Obre els ajustos de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necessites tenir instal·lada l'aplicació Telegram en algun mòbil per poder preparar això. " +
         "Cada aparell té el seu propi bot, que crees tu.\n\n" +
@@ -89,7 +89,7 @@ internal val Ca = Words(
     fixIntro = "Fixar l'app fa que el mòbil només serveixi per a aquesta app, perquè no se'n pugui sortir per error. Android et demanarà que ho confirmis. És opcional.",
     btnPin = "Fixa l'app a la pantalla",
     fixExit = "Per sortir-ne: «Deixa de fixar» o mantén premuts Enrere i Recents. Després d'un reinici cal tornar-la a fixar.",
-    doneTitle = "Tot a punt", doneBody = "Ja pots tancar la guia. Tot es pot canviar més endavant des de «Programació».",
+    doneTitle = "Tot a punt", doneBody = "Ja pots tancar la guia. Tot es pot canviar més endavant des de «Programació». Per arribar-hi, grava una nota i, mentre va el compte enrere, toca «⚙ Programació», a dalt a la dreta de la pantalla.",
 )
 
 private val Es = Words(
@@ -98,7 +98,7 @@ private val Es = Words(
     welcomeBody = "Esta app es para personas a quienes les cuesta usar el móvil: permite hablar por voz con unas pocas personas.\n\nEsta guía ayuda a un adulto a dejarlo todo listo, solo con este móvil. Los pasos son: internet, el bot de Telegram, quién hablará, un PIN opcional y fijar la app. Puedes saltarla y volver desde «Programación».",
     wifiTitle = "1. Internet",
     wifiBody = "Este móvil necesita internet para recibir y enviar mensajes. Lo más sencillo es el Wi-Fi de casa; si no hay, también funciona con una tarjeta SIM con datos (no hace falta para llamar). Sin internet no funciona. Comprueba que esté conectado o conéctalo ahora.",
-    wifiOn = "Conectado a internet ✔", wifiOff = "Aún no está conectado a internet", wifiBtn = "Abrir los ajustes de Wi-Fi",
+    wifiOn = "Conectado a internet ✔ Toca «Siguiente».", wifiOff = "Aún no está conectado a internet", wifiBtn = "Abrir los ajustes de Wi-Fi",
     botTitle = "2. El bot de Telegram",
     botSteps = "Necesitas tener instalada la aplicación Telegram en algún móvil para poder preparar esto. " +
         "Cada aparato tiene su propio bot, que creas tú.\n\n" +
@@ -126,7 +126,7 @@ private val Es = Words(
     fixIntro = "Fijar la app hace que el móvil solo sirva para esta app, para que no se pueda salir por error. Android te pedirá que lo confirmes. Es opcional.",
     btnPin = "Fijar la app en la pantalla",
     fixExit = "Para salir: «Dejar de fijar» o mantén pulsados Atrás y Recientes. Tras un reinicio hay que volver a fijarla.",
-    doneTitle = "Todo listo", doneBody = "Ya puedes cerrar la guía. Todo se puede cambiar después desde «Programación».",
+    doneTitle = "Todo listo", doneBody = "Ya puedes cerrar la guía. Todo se puede cambiar después desde «Programación». Para llegar, graba una nota y, mientras va la cuenta atrás, toca «⚙ Programación», arriba a la derecha de la pantalla.",
 )
 
 private val En = Words(
@@ -135,7 +135,7 @@ private val En = Words(
     welcomeBody = "This app is for people who find phones hard to use: it lets them talk by voice with a few people.\n\nThis guide helps an adult get everything ready, using only this phone. The steps are: internet, the Telegram bot, who will talk, an optional PIN and pinning the app. You can skip it and come back from \"Programming\".",
     wifiTitle = "1. Internet",
     wifiBody = "This phone needs internet to receive and send messages. The easiest way is home Wi-Fi; if there is none, a SIM card with mobile data also works (it does not need to be used for calls). Without internet it does not work. Check that it is connected, or connect it now.",
-    wifiOn = "Connected to the internet ✔", wifiOff = "Not connected to the internet yet", wifiBtn = "Open Wi-Fi settings",
+    wifiOn = "Connected to the internet ✔ Tap \"Next\".", wifiOff = "Not connected to the internet yet", wifiBtn = "Open Wi-Fi settings",
     botTitle = "2. The Telegram bot",
     botSteps = "You need the Telegram app installed on some phone to be able to set this up. " +
         "Each phone has its own bot, which you create.\n\n" +
@@ -163,7 +163,7 @@ private val En = Words(
     fixIntro = "Pinning the app makes the phone usable only for this app, so nobody leaves it by mistake. Android will ask you to confirm. It is optional.",
     btnPin = "Pin the app to the screen",
     fixExit = "To leave: \"Stop pinning\", or hold Back and Recents. After a restart it must be pinned again.",
-    doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\".",
+    doneTitle = "All set", doneBody = "You can close the guide. Everything can be changed later from \"Programming\". To get there, record a note and, during the countdown, tap \"⚙ Programming\", at the top right of the screen.",
 )
 
 private val Fr = Words(
@@ -172,7 +172,7 @@ private val Fr = Words(
     welcomeBody = "Cette application est pour les personnes qui ont du mal à utiliser un téléphone : elle permet de parler par la voix avec quelques personnes.\n\nCe guide aide un adulte à tout préparer, avec ce seul téléphone. Les étapes : internet, le bot Telegram, qui parlera, un code PIN facultatif et l'épinglage de l'application. Vous pouvez l'ignorer et y revenir depuis « Programmation ».",
     wifiTitle = "1. Internet",
     wifiBody = "Ce téléphone a besoin d'internet pour recevoir et envoyer des messages. Le plus simple est le Wi-Fi de la maison ; s'il n'y en a pas, une carte SIM avec données mobiles fonctionne aussi (inutile pour téléphoner). Sans internet, rien ne marche. Vérifiez qu'il est connecté, ou connectez-le maintenant.",
-    wifiOn = "Connecté à internet ✔", wifiOff = "Pas encore connecté à internet", wifiBtn = "Ouvrir les réglages Wi-Fi",
+    wifiOn = "Connecté à internet ✔ Touchez « Suivant ».", wifiOff = "Pas encore connecté à internet", wifiBtn = "Ouvrir les réglages Wi-Fi",
     botTitle = "2. Le bot Telegram",
     botSteps = "Il vous faut l'application Telegram installée sur un téléphone pour pouvoir préparer cela. " +
         "Chaque appareil a son propre bot, que vous créez.\n\n" +
@@ -200,7 +200,7 @@ private val Fr = Words(
     fixIntro = "Épingler l'application fait que le téléphone ne sert qu'à elle, pour qu'on n'en sorte pas par erreur. Android vous demandera de confirmer. C'est facultatif.",
     btnPin = "Épingler l'application à l'écran",
     fixExit = "Pour en sortir : « Ne plus épingler », ou maintenez Retour et Récents. Après un redémarrage, il faut l'épingler de nouveau.",
-    doneTitle = "Tout est prêt", doneBody = "Vous pouvez fermer le guide. Tout peut être modifié plus tard depuis « Programmation ».",
+    doneTitle = "Tout est prêt", doneBody = "Vous pouvez fermer le guide. Tout peut être modifié plus tard depuis « Programmation ». Pour y accéder, enregistrez une note et, pendant le compte à rebours, touchez « ⚙ Programmation », en haut à droite de l'écran.",
 )
 
 private val Articles = listOf("–" to "", "la" to "la", "el" to "el", "l'" to "l'", "en" to "en")
@@ -268,19 +268,22 @@ fun TutorialScreen(
         modifier = Modifier.fillMaxSize().background(Color.White).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Lang.all.chunked(2).forEach { pair ->
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                pair.forEach { (code, label) ->
-                    FilterChip(
-                        selected = Lang.current == code,
-                        onClick = { Lang.set(context, code) },
-                        label = { Text(label, fontSize = 17.sp) },
-                        modifier = Modifier.weight(1f),
-                    )
+        // The language is chosen once, on the first screen: it does not change from step to step.
+        if (step == 0) {
+            Lang.all.chunked(2).forEach { pair ->
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                    pair.forEach { (code, label) ->
+                        FilterChip(
+                            selected = Lang.current == code,
+                            onClick = { Lang.set(context, code) },
+                            label = { Text(label, fontSize = 17.sp) },
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
+            if (S.autoTranslation.isNotEmpty()) Text(S.autoTranslation, fontSize = 14.sp, color = Color.DarkGray)
         }
-        if (S.autoTranslation.isNotEmpty()) Text(S.autoTranslation, fontSize = 14.sp, color = Color.DarkGray)
         TextButton(onClick = { close() }, modifier = Modifier.align(Alignment.End)) { Text(w.skip) }
 
         Column(
@@ -305,7 +308,7 @@ fun TutorialScreen(
                 2 -> {
                     Text(w.botTitle, fontSize = 30.sp, color = Color.Black)
                     Text(w.botSteps, fontSize = 19.sp, color = Color.DarkGray)
-                    if (botName != null) Text(w.alreadyBot, fontSize = 17.sp, color = Color.DarkGray)
+                    if (botName != null) Text(w.alreadyBot, fontSize = 18.sp, color = Color(0xFF2E7D32))
                     OutlinedTextField(
                         value = token, onValueChange = { token = it.trim(); tokenError = false },
                         label = { Text(w.tokenLabel) }, singleLine = true,
